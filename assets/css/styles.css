@@ -1,0 +1,73 @@
+
+:root{
+  --bg:#ddd340;       /* slightly dim yellow (solid) */
+  --card:#ffffff;     /* white cards on light background */
+  --muted:#475569;    /* slate-600 for subdued text */
+  --text:#111827;     /* slate-900 for strong contrast */
+  --border:#e5e7eb;   /* light border */
+  --brand:#1d4ed8;    /* blue-700 for links/buttons */
+  --brand-2:#1e40af;  /* darker hover */
+  --good:#059669;     /* green-600 */
+}
+*{box-sizing:border-box} html,body{margin:0;padding:0}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+a{color:var(--brand);text-decoration:none} a:hover{text-decoration:underline}
+.container{max-width:1040px;margin:0 auto;padding:1rem}
+
+/* Header becomes light with dark text for contrast */
+.site-header{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.85);backdrop-filter:blur(6px);border-bottom:1px solid var(--border)}
+.nav{display:flex;align-items:center;gap:1rem}
+.brand{font-weight:800;color:var(--text)}
+nav{margin-left:auto;display:flex;gap:.5rem}
+nav a{padding:.5rem .75rem;border-radius:.5rem;color:var(--text)}
+nav a.active, nav a:hover{background:#f8fafc;text-decoration:none}
+nav a.cta{background:var(--brand);color:white} nav a.cta:hover{background:var(--brand-2)}
+.menu{display:none;margin-left:.5rem;font-size:1.25rem;background:#f8fafc;color:var(--text);border:1px solid var(--border);border-radius:.5rem;padding:.35rem .6rem}
+
+/* HERO: SOLID fill, no gradient */
+.hero{border-bottom:1px solid var(--border); background: var(--bg);}
+.hero .container{padding:4rem 1rem}
+.hero h1{font-size:clamp(2rem,4vw,3rem);margin:0 0 .5rem}
+.hero p{margin:0 0 1.2rem;color:var(--text)}
+
+.actions{display:flex;gap:.75rem;flex-wrap:wrap}
+.btn{display:inline-block;padding:.75rem 1rem;background:var(--brand);color:white;border:0;border-radius:.75rem;font-weight:700}
+.btn.ghost{background:#ffffff;color:var(--text);border:1px solid var(--border)}
+.btn:hover{background:var(--brand-2);text-decoration:none}
+.btn.ghost:hover{background:#f8fafc}
+
+/* Cards and sections adapted for light theme */
+.features{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;padding:2rem 1rem}
+.card{background:var(--card);border:1px solid var(--border);border-radius:.75rem;padding:1rem}
+.muted{color:var(--muted)}
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+
+/* Pricing */
+.pricing{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+.plan{background:var(--card);border:1px solid var(--border);border-radius:.75rem;padding:1rem;text-align:center}
+.plan.featured{border-color:#93c5fd} /* sky-300 */
+.price{font-size:2rem;font-weight:800;margin:.25rem 0 1rem;color:var(--text)}
+
+/* Forms on light background */
+.form{display:grid;gap:.75rem;max-width:640px}
+.form label{display:grid;gap:.35rem;color:var(--muted)}
+.form input,.form textarea,.form select{
+  width:100%;padding:.75rem .8rem;
+  background:#ffffff;color:var(--text);
+  border:1px solid var(--border);border-radius:.5rem
+}
+
+/* Footer */
+.site-footer{border-top:1px solid var(--border);margin-top:2rem;color:var(--muted);background:rgba(255,255,255,.5)}
+
+/* Blog */
+.post+.post{margin-top:1.25rem}
+.readmore{display:inline-block;margin-top:.25rem}
+
+/* Responsive */
+@media (max-width: 900px){
+  .features,.pricing,.grid-2{grid-template-columns:1fr}
+  nav{display:none}
+  nav.open{display:flex;flex-direction:column;align-items:flex-start}
+  .menu{display:inline-block}
+}
