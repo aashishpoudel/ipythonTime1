@@ -6,6 +6,83 @@
   <title>Course — iPythonTime</title>
   <meta name="description" content="Course page" />
   <link rel="stylesheet" href="assets/css/styles.css" />
+
+    <style>
+    /* Course page redesign styles */
+    .hero{
+      background: linear-gradient(120deg, rgba(255,255,255,.8), rgba(255,255,255,.6));
+      border:1px solid var(--border);
+      border-radius:1rem;
+      padding:1.25rem 1.25rem 1rem;
+      margin: .5rem 0 1rem;
+      box-shadow: 0 6px 16px rgba(0,0,0,.06);
+    }
+    .hero h1{ margin:0 0 .25rem 0 }
+    .hero p{ margin:.25rem 0 .75rem 0; color:var(--muted) }
+    .page-grid{
+      display:grid;
+      grid-template-columns: 260px 1fr;
+      gap:1rem;
+      align-items:start;
+    }
+    .toc{
+      position:sticky; top:6rem;
+      background: rgba(255,255,255,.75);
+      border:1px solid var(--border);
+      border-radius:.75rem;
+      padding:.75rem;
+    }
+    .toc h3{
+      margin:.25rem 0 .5rem 0;
+      font-size:1rem; color:var(--muted);
+      letter-spacing:.01em; text-transform:uppercase;
+    }
+    .toc ol{ list-style:none; padding-left:0; margin:0 }
+    .toc a{
+      display:block; padding:.4rem .5rem; border-radius:.5rem;
+      text-decoration:none; color:var(--text);
+    }
+    .toc a:hover{ background:#f8fafc; text-decoration:none }
+    .toc a.active{ background:#eff6ff; color:var(--brand); font-weight:600; }
+    /* Mobile chips */
+    .toc-chips{
+      display:none;
+      overflow:auto; white-space:nowrap;
+      margin:.25rem 0 .75rem; padding:.25rem .25rem 0;
+    }
+    .toc-chips a{
+      display:inline-block; margin:0 .25rem .5rem 0; padding:.4rem .6rem;
+      background:#fff; border:1px solid var(--border); border-radius:999px;
+      text-decoration:none; color:var(--text);
+    }
+    .toc-chips a.active{ border-color:var(--brand); }
+    /* Content sections */
+    .section{
+      background:#ffffff;
+      border:1px solid var(--border);
+      border-radius:.75rem;
+      padding:1rem;
+      margin-bottom:1rem;
+    }
+    .section h2{ margin-top:0 }
+    .callout{ background:#ffffff; }
+    /* Responsive layout */
+    @media (max-width: 980px){
+      .page-grid{ grid-template-columns:1fr }
+      .toc{ display:none }
+      .toc-chips{ display:block }
+    }
+    </style>
+    
+<!-- Theme override: Light Green -->
+    <style>
+      /* Tinted section + card backgrounds to replace pure white */
+      .section{ background:#ecfdf5; border-color:#bbf7d0; }
+      .card{ background:#ecfdf5; border-color:#bbf7d0; }
+      .callout{ background:#ecfdf5; border-color:#bbf7d0; }
+      /* Optional: soften list markers area slightly */
+      .nice-list li{ background:transparent; }
+    </style>
 </head>
 <body>
 
@@ -26,25 +103,26 @@
 </header>
 
   <main class="container">
-    <h1>Python Roadmap</h1>
-    <p>This roadmap consolidates your lists (deduplicated) into a clean progression. Use it as a checklist or syllabus.</p>
-
-    <nav aria-label="Roadmap sections" class="roadmap-toc">
-      <ol class="nice-list">
-        <li><a href="#foundations">Foundations</a></li>
-        <li><a href="#oop">Object‑Oriented Programming (OOP)</a></li>
-        <li><a href="#dsa">Data Structures &amp; Algorithms (DSA)</a></li>
-        <li><a href="#pkg">Package Management</a></li>
-        <li><a href="#advanced">Advanced Python</a></li>
-        <li><a href="#web">Web Frameworks</a></li>
-        <li><a href="#automation">Automation</a></li>
-        <li><a href="#testing">Testing</a></li>
-        <li><a href="#datasci">Data Science &amp; Machine Learning</a></li>
-      </ol>
-    </nav>
+        <section class="hero">
+          <h1>Python Roadmap</h1>
+          <p>This roadmap is self-designed course based on experience on teaching and professional working.</p>
+          <a class="btn" href="signup.html">Start Learning</a>
+        </section>
+        <nav class="toc-chips" aria-label="On this page"><a href="#foundations">Foundations</a><a href="#oop">Object‑Oriented Programming (OOP)</a><a href="#dsa">Data Structures &amp; Algorithms (DSA)</a><a href="#pkg">Package Management</a><a href="#advanced">Advanced Python</a><a href="#web">Web Frameworks</a><a href="#automation">Automation</a><a href="#testing">Testing</a><a href="#datasci">Data Science &amp; Machine Learning</a></nav>
+        <div class="page-grid">
+          <aside class="toc" aria-label="On this page">
+            <h3>On this page</h3>
+            <ol>
+              <li><a href="#foundations">Foundations</a></li><li><a href="#oop">Object‑Oriented Programming (OOP)</a></li><li><a href="#dsa">Data Structures &amp; Algorithms (DSA)</a></li><li><a href="#pkg">Package Management</a></li><li><a href="#advanced">Advanced Python</a></li><li><a href="#web">Web Frameworks</a></li><li><a href="#automation">Automation</a></li><li><a href="#testing">Testing</a></li><li><a href="#datasci">Data Science &amp; Machine Learning</a></li>
+            </ol>
+          </aside>
+          <div class="content">
+            
+    
+    
 
     <!-- 1) FOUNDATIONS -->
-    <section id="foundations">
+    <section class="section" id="foundations">
       <h2>1) Foundations</h2>
       <p>Absolute basics through core language features and beginner projects.</p>
       <div class="cards">
@@ -82,7 +160,7 @@
     </section>
 
     <!-- 2) OOP -->
-    <section id="oop">
+    <section class="section" id="oop">
       <h2>2) Object‑Oriented Programming (OOP)</h2>
       <ol class="nice-list">
         <li>OOP Fundamentals</li>
@@ -93,7 +171,7 @@
     </section>
 
     <!-- 3) DSA -->
-    <section id="dsa">
+    <section class="section" id="dsa">
       <h2>3) Data Structures &amp; Algorithms (DSA)</h2>
       <div class="cards">
         <article class="card">
@@ -117,7 +195,7 @@
     </section>
 
     <!-- 4) Package Management -->
-    <section id="pkg">
+    <section class="section" id="pkg">
       <h2>4) Package Management</h2>
       <ol class="nice-list">
         <li>PyPI</li>
@@ -127,7 +205,7 @@
     </section>
 
     <!-- 5) Advanced Python -->
-    <section id="advanced">
+    <section class="section" id="advanced">
       <h2>5) Advanced Python</h2>
       <div class="cards">
         <article class="card">
@@ -155,7 +233,7 @@
     </section>
 
     <!-- 6) Web Frameworks -->
-    <section id="web">
+    <section class="section" id="web">
       <h2>6) Web Frameworks</h2>
       <ol class="nice-list">
         <li>Django</li>
@@ -166,7 +244,7 @@
     </section>
 
     <!-- 7) Automation -->
-    <section id="automation">
+    <section class="section" id="automation">
       <h2>7) Automation</h2>
       <ol class="nice-list">
         <li>File Manipulation &amp; OS tasks</li>
@@ -179,7 +257,7 @@
     </section>
 
     <!-- 8) Testing -->
-    <section id="testing">
+    <section class="section" id="testing">
       <h2>8) Testing</h2>
       <ol class="nice-list">
         <li>Unit Testing</li>
@@ -190,7 +268,7 @@
     </section>
 
     <!-- 9) Data Science & ML -->
-    <section id="datasci">
+    <section class="section" id="datasci">
       <h2>9) Data Science &amp; Machine Learning</h2>
       <div class="cards">
         <article class="card">
@@ -214,20 +292,11 @@
       </div>
     </section>
 
-    <section aria-label="Notes">
-      <h2>Notes</h2>
-      <ul class="nice-list">
-        <li>Items were deduplicated and grouped by theme. Original labels like <em>MatplotLib_Graphs</em> &amp; <em>Matlabplot_Maps</em> were unified under “Matplotlib (Graphs &amp; Maps).”</li>
-        <li>“Important Modules” includes commonly‑used packages (e.g., <code>pathlib</code>, <code>json</code>, <code>csv</code>, <code>itertools</code>, <code>collections</code>).</li>
-      </ul>
-    </section>
-
-    <div class="callout">
-      <p>Want this as a printable PDF or with checkboxes? Just say the word and I’ll generate it.</p>
-    </div>
-
     <a class="btn" href="signup.html">Start Learning</a>
-  </main>
+
+          </div>
+        </div>
+        </main>
 
   <footer class="site-footer">
     <div class="container">
@@ -237,5 +306,34 @@
 
   <script src="assets/js/main.js"></script>
 
+
+    <script>
+    // Smooth scroll for in-page links (course page only)
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        const id = a.getAttribute('href').slice(1);
+        const el = document.getElementById(id);
+        if (el){
+          e.preventDefault();
+          el.scrollIntoView({behavior:'smooth', block:'start'});
+          history.replaceState(null, '', '#'+id);
+        }
+      });
+    });
+    // Scroll spy: highlight current section in TOC (aside + chips)
+    const links = Array.from(document.querySelectorAll('.toc a, .toc-chips a'));
+    const targets = links.map(a=> document.querySelector(a.getAttribute('href')) ).filter(Boolean);
+    const onIntersect = (entries)=>{
+      entries.forEach(entry=>{
+        if (entry.isIntersecting){
+          const id = '#'+entry.target.id;
+          links.forEach(a=> a.classList.toggle('active', a.getAttribute('href')===id));
+        }
+      });
+    };
+    const obs = new IntersectionObserver(onIntersect, {rootMargin:'-30% 0px -60% 0px', threshold:0});
+    targets.forEach(t=> obs.observe(t));
+    </script>
+    
 </body>
 </html>
