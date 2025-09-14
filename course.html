@@ -7,89 +7,16 @@
   <meta name="description" content="Course page" />
   <link rel="stylesheet" href="assets/css/styles.css" />
 
-    <style>
-    /* Course page redesign styles */
-    .hero{
-      background: linear-gradient(120deg, rgba(255,255,255,.8), rgba(255,255,255,.6));
-      border:1px solid var(--border);
-      border-radius:1rem;
-      padding:1.25rem 1.25rem 1rem;
-      margin: .5rem 0 1rem;
-      box-shadow: 0 6px 16px rgba(0,0,0,.06);
-    }
-    .hero h1{ margin:0 0 .25rem 0 }
-    .hero p{ margin:.25rem 0 .75rem 0; color:var(--muted) }
-    .page-grid{
-      display:grid;
-      grid-template-columns: 260px 1fr;
-      gap:1rem;
-      align-items:start;
-    }
-    .toc{
-      position:sticky; top:6rem;
-      background: rgba(255,255,255,.75);
-      border:1px solid var(--border);
-      border-radius:.75rem;
-      padding:.75rem;
-    }
-    .toc h3{
-      margin:.25rem 0 .5rem 0;
-      font-size:1rem; color:var(--muted);
-      letter-spacing:.01em; text-transform:uppercase;
-    }
-    .toc ol{ list-style:none; padding-left:0; margin:0 }
-    .toc a{
-      display:block; padding:.4rem .5rem; border-radius:.5rem;
-      text-decoration:none; color:var(--text);
-    }
-    .toc a:hover{ background:#f8fafc; text-decoration:none }
-    .toc a.active{ background:#eff6ff; color:var(--brand); font-weight:600; }
-    /* Mobile chips */
-    .toc-chips{
-      display:none;
-      overflow:auto; white-space:nowrap;
-      margin:.25rem 0 .75rem; padding:.25rem .25rem 0;
-    }
-    .toc-chips a{
-      display:inline-block; margin:0 .25rem .5rem 0; padding:.4rem .6rem;
-      background:#fff; border:1px solid var(--border); border-radius:999px;
-      text-decoration:none; color:var(--text);
-    }
-    .toc-chips a.active{ border-color:var(--brand); }
-    /* Content sections */
-    .section{
-      background:#ffffff;
-      border:1px solid var(--border);
-      border-radius:.75rem;
-      padding:1rem;
-      margin-bottom:1rem;
-    }
-    .section h2{ margin-top:0 }
-    .callout{ background:#ffffff; }
-    /* Responsive layout */
-    @media (max-width: 980px){
-      .page-grid{ grid-template-columns:1fr }
-      .toc{ display:none }
-      .toc-chips{ display:block }
-    }
-    </style>
+    
     
 <!-- Theme override: Light Green -->
-    <style>
-      /* Tinted section + card backgrounds to replace pure white */
-      .section{ background:#ecfdf5; border-color:#bbf7d0; }
-      .card{ background:#ecfdf5; border-color:#bbf7d0; }
-      .callout{ background:#ecfdf5; border-color:#bbf7d0; }
-      /* Optional: soften list markers area slightly */
-      .nice-list li{ background:transparent; }
-    </style>
+    
 </head>
 <body>
 
     <header class="site-header">
   <div class="container nav">
-    <a href="index.html" class="home-button">
-    <img src="images/home-icon.png" alt="Home" style="width: 24px; height: 24px;">
+    <a class="brand" href="index.html">iPythonTime</a>
     <nav>
       <a href="course.html">Course</a>
       <a href="pricing.html">Pricing</a>
