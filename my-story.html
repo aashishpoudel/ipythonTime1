@@ -6,25 +6,35 @@
   <title>My Story — iPythonTime</title>
   <meta name="description" content="My Story page" />
   <link rel="stylesheet" href="assets/css/styles.css" />
+<style>
+/* Fallback just for this page to ensure drawer is vertical & hidden by default */
+.site-header nav.drawer{
+  display:none;
+  flex-direction:column;
+  gap:.25rem;
+}
+.site-header nav.drawer.open{ display:flex }
+.site-header .menu{ position:relative; z-index:60; cursor:pointer }
+</style>
 </head>
 <body>
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="index.html">iPythonTime</a>
+    <nav>
+      <a href="course.html">Course</a>
+      <a href="pricing.html">Pricing</a>
+      <a class="cta" href="signup.html">Sign-up/Contact</a>
+    </nav>
+    <button class="menu" aria-label="Toggle menu" onclick="toggleMenu()">☰</button>
+    <nav class="drawer" id="drawer" aria-label="More">
+      <a href="blog.html">Blog</a>
+      <a href="my-story.html">My Story</a>
+    </nav>
+  </div>
+</header>
 
-    <header class="site-header">
-      <div class="container nav">
-        <a class="brand" href="index.html">iPythonTime</a>
-        <nav>
-          <a href="blog.html">Blog</a>
-          <a href="my-story.html">My Story</a>
-          <a href="course.html">Course</a>
-          <a href="pricing.html">Pricing</a>
-          <a class="cta" href="signup.html">Sign-up/Contact</a>
-        </nav>
-        <button class="menu" aria-label="Toggle menu" onclick="toggleMenu()">☰</button>
-      </div>
-    </header>
-
-
-  <main class="container">
+<main class="container">
     <h1>My Story</h1>
     <p>We started iPythonTime to make coding welcoming for kids everywhere. Our approach blends creativity, structure, and encouragement.</p>
     <div class="grid-2">
@@ -49,6 +59,19 @@
     </div>
   </footer>
   <script src="assets/js/main.js"></script>
+
+
+<script>
+// Define toggleMenu if not already present (defensive)
+if (typeof window.toggleMenu !== 'function') {
+  window.toggleMenu = function(){
+    var headerNav = document.querySelector('header nav');
+    var drawer = document.getElementById('drawer');
+    if (headerNav) headerNav.classList.toggle('open');
+    if (drawer) drawer.classList.toggle('open');
+  };
+}
+</script>
 
 </body>
 </html>

@@ -10,40 +10,231 @@
 <body>
 
     <header class="site-header">
-      <div class="container nav">
-        <a class="brand" href="index.html">iPythonTime</a>
-        <nav>
-          <a href="blog.html">Blog</a>
-          <a href="my-story.html">My Story</a>
-          <a href="course.html">Course</a>
-          <a href="pricing.html">Pricing</a>
-          <a class="cta" href="signup.html">Sign-up/Contact</a>
-        </nav>
-        <button class="menu" aria-label="Toggle menu" onclick="toggleMenu()">☰</button>
-      </div>
-    </header>
-
+  <div class="container nav">
+    <a class="brand" href="index.html">iPythonTime</a>
+    <nav>
+      <a href="course.html">Course</a>
+      <a href="pricing.html">Pricing</a>
+      <a class="cta" href="signup.html">Sign-up/Contact</a>
+    </nav>
+    <button class="menu" aria-label="Toggle menu" onclick="toggleMenu()">☰</button>
+    <nav class="drawer" id="drawer" aria-label="More">
+      <a href="blog.html">Blog</a>
+      <a href="my-story.html">My Story</a>
+    </nav>
+  </div>
+</header>
 
   <main class="container">
-    <h1>Course</h1>
-    <p>Our 6-week beginner course covers:</p>
-    <ol class="nice-list">
-      <li>Python setup & print, variables, types</li>
-      <li>Lists, loops, and simple logic</li>
-      <li>Functions and modular thinking</li>
-      <li>Mini-project: Number Guessing Game</li>
-      <li>Files & tidy code</li>
-      <li>Final project showcase</li>
-    </ol>
-    <a class="btn" href="signup.html">Enroll Now</a>
-  </main>
+    <h1>Python Roadmap</h1>
+    <p>This roadmap consolidates your lists (deduplicated) into a clean progression. Use it as a checklist or syllabus.</p>
 
+    <nav aria-label="Roadmap sections" class="roadmap-toc">
+      <ol class="nice-list">
+        <li><a href="#foundations">Foundations</a></li>
+        <li><a href="#oop">Object‑Oriented Programming (OOP)</a></li>
+        <li><a href="#dsa">Data Structures &amp; Algorithms (DSA)</a></li>
+        <li><a href="#pkg">Package Management</a></li>
+        <li><a href="#advanced">Advanced Python</a></li>
+        <li><a href="#web">Web Frameworks</a></li>
+        <li><a href="#automation">Automation</a></li>
+        <li><a href="#testing">Testing</a></li>
+        <li><a href="#datasci">Data Science &amp; Machine Learning</a></li>
+      </ol>
+    </nav>
+
+    <!-- 1) FOUNDATIONS -->
+    <section id="foundations">
+      <h2>1) Foundations</h2>
+      <p>Absolute basics through core language features and beginner projects.</p>
+      <div class="cards">
+        <article class="card">
+          <h3>Basics</h3>
+          <ol class="nice-list">
+            <li>Python Shell, Math, Logical Operations</li>
+            <li>Basic Syntax; Print &amp; Formatting</li>
+            <li>Variables &amp; Typecasting</li>
+            <li>Data Types (Numbers, Strings)</li>
+            <li>Lists: creation, slicing, common operations</li>
+            <li>Tuples</li>
+            <li>Sets (intro)</li>
+            <li>Dictionaries</li>
+            <li>Booleans; Truthy/Falsy</li>
+            <li>Conditionals (if/elif/else)</li>
+            <li>Loops (for/while); Nested loops</li>
+            <li>String ↔ List commonalities</li>
+            <li>Functions (basics)</li>
+            <li>Exceptions (intro)</li>
+          </ol>
+        </article>
+
+        <article class="card">
+          <h3>Practice &amp; Tools</h3>
+          <ol class="nice-list">
+            <li>Loop exercises &amp; print patterns</li>
+            <li>PyCharm shortcuts &amp; debugging</li>
+            <li>Unicode (e.g., Devanagari) <em>(bonus)</em></li>
+            <li>Math curriculum exercises</li>
+            <li>Turtle programming</li>
+          </ol>
+        </article>
+      </div>
+    </section>
+
+    <!-- 2) OOP -->
+    <section id="oop">
+      <h2>2) Object‑Oriented Programming (OOP)</h2>
+      <ol class="nice-list">
+        <li>OOP Fundamentals</li>
+        <li>Classes &amp; Objects</li>
+        <li>Methods (incl. dunder methods)</li>
+        <li>Inheritance &amp; composition</li>
+      </ol>
+    </section>
+
+    <!-- 3) DSA -->
+    <section id="dsa">
+      <h2>3) Data Structures &amp; Algorithms (DSA)</h2>
+      <div class="cards">
+        <article class="card">
+          <h3>Core Structures</h3>
+          <ol class="nice-list">
+            <li>Arrays &amp; Linked Lists</li>
+            <li>Stacks &amp; Queues</li>
+            <li>Heaps / Priority Queues</li>
+            <li>Hash Tables</li>
+            <li>Binary Search Trees</li>
+          </ol>
+        </article>
+        <article class="card">
+          <h3>Core Techniques</h3>
+          <ol class="nice-list">
+            <li>Recursion</li>
+            <li>Searching &amp; Sorting (selection, insertion, merge, quick)</li>
+          </ol>
+        </article>
+      </div>
+    </section>
+
+    <!-- 4) Package Management -->
+    <section id="pkg">
+      <h2>4) Package Management</h2>
+      <ol class="nice-list">
+        <li>PyPI</li>
+        <li><code>pip</code></li>
+        <li><code>conda</code></li>
+      </ol>
+    </section>
+
+    <!-- 5) Advanced Python -->
+    <section id="advanced">
+      <h2>5) Advanced Python</h2>
+      <div class="cards">
+        <article class="card">
+          <h3>Language Power‑Ups</h3>
+          <ol class="nice-list">
+            <li>Functions: arguments (*args, **kwargs, defaults), scope</li>
+            <li>List Comprehensions</li>
+            <li>Generators &amp; Iterators</li>
+            <li>Lambdas &amp; Expressions</li>
+            <li>Decorators</li>
+            <li>Regex</li>
+            <li>Datetime</li>
+          </ol>
+        </article>
+        <article class="card">
+          <h3>Working with the System</h3>
+          <ol class="nice-list">
+            <li>OS &amp; File Structure</li>
+            <li>File Handling (read/write, CSV/JSON)</li>
+            <li>Important Standard/3rd‑party Modules</li>
+            <li>Virtual Environments &amp; Paradigms</li>
+          </ol>
+        </article>
+      </div>
+    </section>
+
+    <!-- 6) Web Frameworks -->
+    <section id="web">
+      <h2>6) Web Frameworks</h2>
+      <ol class="nice-list">
+        <li>Django</li>
+        <li>Flask</li>
+        <li>FastAPI</li>
+        <li>Tornado</li>
+      </ol>
+    </section>
+
+    <!-- 7) Automation -->
+    <section id="automation">
+      <h2>7) Automation</h2>
+      <ol class="nice-list">
+        <li>File Manipulation &amp; OS tasks</li>
+        <li>Web Scraping</li>
+        <li>GUI Automation</li>
+        <li>Network Automation</li>
+        <li>Automated Email Sender</li>
+        <li>Getting Data from APIs</li>
+      </ol>
+    </section>
+
+    <!-- 8) Testing -->
+    <section id="testing">
+      <h2>8) Testing</h2>
+      <ol class="nice-list">
+        <li>Unit Testing</li>
+        <li>Integration Testing</li>
+        <li>End‑to‑End Testing</li>
+        <li>Test‑Driven Development (TDD)</li>
+      </ol>
+    </section>
+
+    <!-- 9) Data Science & ML -->
+    <section id="datasci">
+      <h2>9) Data Science &amp; Machine Learning</h2>
+      <div class="cards">
+        <article class="card">
+          <h3>Core Stack</h3>
+          <ol class="nice-list">
+            <li>NumPy</li>
+            <li>Pandas (Spreadsheets)</li>
+            <li>Matplotlib (Graphs &amp; Maps)</li>
+            <li>Seaborn</li>
+            <li>Scikit‑Learn</li>
+          </ol>
+        </article>
+        <article class="card">
+          <h3>ML Frameworks &amp; Data</h3>
+          <ol class="nice-list">
+            <li>TensorFlow</li>
+            <li>PyTorch</li>
+            <li>SQL Databases (MySQL)</li>
+          </ol>
+        </article>
+      </div>
+    </section>
+
+    <section aria-label="Notes">
+      <h2>Notes</h2>
+      <ul class="nice-list">
+        <li>Items were deduplicated and grouped by theme. Original labels like <em>MatplotLib_Graphs</em> &amp; <em>Matlabplot_Maps</em> were unified under “Matplotlib (Graphs &amp; Maps).”</li>
+        <li>“Important Modules” includes commonly‑used packages (e.g., <code>pathlib</code>, <code>json</code>, <code>csv</code>, <code>itertools</code>, <code>collections</code>).</li>
+      </ul>
+    </section>
+
+    <div class="callout">
+      <p>Want this as a printable PDF or with checkboxes? Just say the word and I’ll generate it.</p>
+    </div>
+
+    <a class="btn" href="signup.html">Start Learning</a>
+  </main>
 
   <footer class="site-footer">
     <div class="container">
       <p>&copy; <span id="year"></span> iPythonTime — All rights reserved.</p>
     </div>
   </footer>
+
   <script src="assets/js/main.js"></script>
 
 </body>

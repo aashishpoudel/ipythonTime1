@@ -64,6 +64,35 @@ nav a.cta{background:var(--brand);color:white} nav a.cta:hover{background:var(--
 .post+.post{margin-top:1.25rem}
 .readmore{display:inline-block;margin-top:.25rem}
 
+/* --- Drawer menu for Blog / My Story --- */
+.site-header .container{position:relative}
+.drawer{
+  display:none;
+  position:absolute;
+  right:1rem;
+  top:3.25rem;
+  background:#ffffff;
+  color:var(--text);
+  border:1px solid var(--border);
+  border-radius:.75rem;
+  padding:.5rem;
+  box-shadow:0 10px 20px rgba(0,0,0,.08);
+  z-index:50;
+}
+.drawer a{
+  padding:.5rem .75rem;
+  border-radius:.5rem;
+  white-space:nowrap;
+  color:var(--text);
+}
+.drawer a:hover{
+  background:#f8fafc;
+  text-decoration:none;
+}
+
+/* Show hamburger on all sizes */
+.menu{display:inline-block}
+
 /* Responsive */
 @media (max-width: 900px){
   .features,.pricing,.grid-2{grid-template-columns:1fr}
@@ -71,3 +100,18 @@ nav a.cta{background:var(--brand);color:white} nav a.cta:hover{background:var(--
   nav.open{display:flex;flex-direction:column;align-items:flex-start}
   .menu{display:inline-block}
 }
+
+
+/* Ensure drawer shows when open and hamburger clickable */
+.drawer.open{display:block}
+.site-header .menu{position:relative; z-index:60; cursor:pointer}
+
+
+/* === Drawer vertical override (beats generic .site-header nav flex row) === */
+.site-header nav.drawer{
+  display:none;            /* hidden by default */
+  flex-direction:column;   /* stack items vertically */
+  gap:.25rem;
+}
+.site-header nav.drawer.open{ display:flex }   /* show vertically when open */
+.site-header nav.drawer a{ display:block }     /* full-width clickable rows */
