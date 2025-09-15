@@ -1,8 +1,6 @@
 
-function toggleMenu(){
-  const headerNav = document.querySelector('header nav');
+function toggleMenu() {
   const drawer = document.getElementById('drawer');
-  if (headerNav) headerNav.classList.toggle('open');
   if (drawer) drawer.classList.toggle('open');
 }
 document.getElementById('year').textContent = new Date().getFullYear();
