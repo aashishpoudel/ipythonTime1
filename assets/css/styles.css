@@ -116,8 +116,7 @@ nav a.cta{background:var(--brand);color:white} nav a.cta:hover{background:var(--
   top: 0;
   right: 0;
   height: 100dvh;
-  width: 80%;
-  max-width: 360px;
+  width: 40%;
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -128,6 +127,7 @@ nav a.cta{background:var(--brand);color:white} nav a.cta:hover{background:var(--
   transition: transform .3s ease;
   z-index: 1000;
 }
+
 
 /* When opened, slide in */
 .site-header nav.drawer.open {
