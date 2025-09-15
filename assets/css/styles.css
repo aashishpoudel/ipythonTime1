@@ -93,13 +93,55 @@ nav a.cta{background:var(--brand);color:white} nav a.cta:hover{background:var(--
 /* Show hamburger on all sizes */
 .menu{display:inline-block}
 
-/* Responsive */
-@media (max-width: 900px){
-  .features,.pricing,.grid-2{grid-template-columns:1fr}
-  nav{display:none}
-  nav.open{display:flex;flex-direction:column;align-items:flex-start}
-  .menu{display:inline-block}
+/* Header layout */
+.site-header .nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
 }
+
+/* Primary menu: ALWAYS horizontal */
+.site-header nav.primary {
+  display: flex;
+  gap: .75rem;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+.site-header nav.primary a { white-space: nowrap; }
+
+/* Drawer (hamburger) menu: off-canvas right */
+.site-header nav.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100dvh;
+  width: 35%;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  background: #fff;
+  box-shadow: -8px 0 24px rgba(0,0,0,.18);
+  transform: translateX(100%);
+  transition: transform .3s ease;
+  z-index: 1000;
+}
+
+
+/* When opened, slide in */
+.site-header nav.drawer.open {
+  transform: translateX(0);
+}
+
+/* Ensure mobile never stacks the primary menu vertically */
+@media (max-width: 640px) {
+  .site-header nav.primary {
+    flex-direction: row !important;
+  }
+  .site-header .menu { display: inline-flex; }
+}
+
 
 
 /* Ensure drawer shows when open and hamburger clickable */
@@ -107,11 +149,22 @@ nav a.cta{background:var(--brand);color:white} nav a.cta:hover{background:var(--
 .site-header .menu{position:relative; z-index:60; cursor:pointer}
 
 
-/* === Drawer vertical override (beats generic .site-header nav flex row) === */
-.site-header nav.drawer{
-  display:none;            /* hidden by default */
-  flex-direction:column;   /* stack items vertically */
-  gap:.25rem;
-}
-.site-header nav.drawer.open{ display:flex }   /* show vertically when open */
+
+
 .site-header nav.drawer a{ display:block }     /* full-width clickable rows */
+
+/* Features grid: responsive columns */
+@media (max-width: 960px) {
+  .features { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .features { grid-template-columns: 1fr; }
+}
+
+/* (Optional) Pricing: make it stack nicely too */
+@media (max-width: 960px) {
+  .pricing { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .pricing { grid-template-columns: 1fr; }
+}
