@@ -6,6 +6,7 @@
   <title>Sign-up — iPythonTime</title>
   <meta name="description" content="Sign-up page" />
   <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@19.5.6/build/css/intlTelInput.css" />
 </head>
 <body>
 <header class="site-header">
@@ -49,7 +50,7 @@
             <input name="city" required placeholder="San Diego" />
           </label>
           <label>Country
-            <input name="country" required placeholder="USA" />
+            <select id="country" name="country" required></select>
           </label>
         </div>
       </fieldset>
@@ -60,9 +61,12 @@
           <label>Email
             <input name="email" type="email" required placeholder="parent@example.com" />
           </label>
-          <label>Phone
-            <input name="phone" type="tel" placeholder="+1 555 555 5555" />
+          <label>Phone (WhatsApp enabled)
+            <input id="phone" name="phone" type="tel" placeholder="(555) 555-5555" />
           </label>
+          <!-- Optional hidden fields if you want to capture extras on submit -->
+          <input type="hidden" name="phone_country_iso" id="phone_country_iso" />
+          <input type="hidden" name="phone_dial_code" id="phone_dial_code" />
         </div>
       </fieldset>
 
@@ -90,6 +94,8 @@
       <p>&copy; <span id="year"></span> iPythonTime — All rights reserved.</p>
     </div>
   </footer>
+  <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@19.5.6/build/js/intlTelInput.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@19.5.6/build/js/utils.js"></script>
   <script src="assets/js/main.js"></script>
 
 </body>
