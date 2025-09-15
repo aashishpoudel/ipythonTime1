@@ -152,3 +152,19 @@ nav a.cta{background:var(--brand);color:white} nav a.cta:hover{background:var(--
 
 
 .site-header nav.drawer a{ display:block }     /* full-width clickable rows */
+
+/* Features grid: responsive columns */
+@media (max-width: 960px) {
+  .features { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .features { grid-template-columns: 1fr; }
+}
+
+/* (Optional) Pricing: make it stack nicely too */
+@media (max-width: 960px) {
+  .pricing { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .pricing { grid-template-columns: 1fr; }
+}
