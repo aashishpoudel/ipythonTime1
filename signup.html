@@ -30,7 +30,9 @@
 <main class="container">
     <h1>Sign-up</h1>
     <p>Tell us about the learner. We’ll reach out with timeslots and next steps.</p>
-    <form class="form" method="post" action="#" onsubmit="event.preventDefault(); alert('Submitted! (demo)');">
+    <form id="signupForm" class="form">
+<!--      <button class="btn" type="submit">Submit</button>-->
+<!--      <p id="formMsg" role="status" aria-live="polite"></p>-->
       <fieldset class="fieldset">
         <legend>Student</legend>
         <label>Who is learning?
@@ -86,6 +88,7 @@
 
       <button class="btn" type="submit">Submit</button>
     </form>
+    <p id="formMsg" role="status" aria-live="polite"></p>
   </main>
 
 

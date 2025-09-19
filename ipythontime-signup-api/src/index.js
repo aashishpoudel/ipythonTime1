@@ -1,0 +1,84 @@
+export default {
+  async fetch(request, env) {
+    const { method, url, headers } = request;
+    const cors = {
+      "Access-Control-Allow-Origin": env.ALLOWED_ORIGIN,
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "content-type, x-admin-key",
+    };
+
+    if (method === "OPTIONS") return new Response(null, { headers: cors });
+
+    // ---- debug endpoint (checks D1 binding is live) ----
+    if (method === "GET" && new URL(url).pathname === "/api/debug") {
+	  const keys = Object.keys(env || {});
+	  const hasDB = !!env.DB;
+	  let probe = null;
+	  if (hasDB) {
+		try { probe = await env.DB.prepare("select 42 as x").first(); }
+		catch (e) { probe = String(e); }
+	  }
+	  return new Response(JSON.stringify({ hasDB, keys, probe }), {
+		headers: { "Content-Type": "application/json" }
+	  });
+	}
+
+
+    // ---- public submit endpoint ----
+    if (method === "POST" && new URL(url).pathname === "/api/submit") {
+      let body;
+      try { body = await request.json(); }
+      catch { return json({ ok:false, error:"Invalid JSON" }, 400, cors); }
+
+      if (!body?.email) return json({ ok:false, error:"Missing email" }, 400, cors);
+
+      const stmt = `
+        INSERT INTO signups
+          (who_is_learning, student_name, student_dob, parent_name, email, phone,
+           phone_country_iso, phone_dial_code, country_iso, country_label, message)
+        VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11)
+      `;
+      const vals = [
+        body.who_is_learning ?? null,
+        body.student_name ?? null,
+        body.student_dob ?? null,
+        body.parent_name ?? null,
+        body.email ?? null,
+        body.phone ?? null,
+        body.phone_country_iso ?? null,
+        body.phone_dial_code ?? null,
+        body.country_iso ?? null,
+        body.country_label ?? null,
+        body.message ?? null,
+      ];
+
+      try {
+        await env.DB.prepare(stmt).bind(...vals).run();
+        return json({ ok:true }, 200, cors);
+      } catch (e) {
+        return json({ ok:false, error:String(e) }, 500, cors);
+      }
+    }
+
+    // ---- admin read example ----
+    if (method === "GET" && new URL(url).pathname === "/api/admin/latest") {
+      if (headers.get("x-admin-key") !== env.ADMIN_KEY)
+        return new Response("Unauthorized", { status: 401, headers: cors });
+
+      const { results } = await env.DB.prepare(`
+        SELECT id, created_at, student_name, email, phone_dial_code, phone, country_iso
+        FROM signups ORDER BY id DESC LIMIT 50
+      `).all();
+      return json({ ok:true, results }, 200, cors);
+    }
+
+    return new Response("Not found", { status: 404, headers: cors });
+  }
+};
+
+function json(obj, status=200, headers={}) {
+  return new Response(JSON.stringify(obj), {
+    status,
+    headers: { "Content-Type":"application/json", ...headers }
+  });
+}
