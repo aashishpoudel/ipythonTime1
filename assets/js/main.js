@@ -125,13 +125,20 @@ document.addEventListener('click', (e) => {
       });
       const data = await res.json().catch(() => ({}));
 
-      if (res.ok && data.ok) {
-        if (msg) msg.textContent = 'Thanks! We received your request and Email sent for confirmation. Someone from iPythonTime team will be in touch with you in Email or WhatsApp';
-        form.reset();
-      } else {
-        if (msg) msg.textContent = 'Sorry—something went wrong. Please try again.';
-        console.error('Submit error:', data);
-      }
+      console.log("[frontend] API response", data);
+
+        if (res.ok && data.ok) {
+          if (data.email_sent) {
+            if (msg) msg.textContent = 'Thanks! We received your request and sent a confirmation email.';
+          } else {
+            if (msg) msg.textContent = 'Thanks! We received your request. (Email did not send yet.)';
+            console.warn("[frontend] email_error", data.email_error);
+          }
+          form.reset();
+        } else {
+          if (msg) msg.textContent = 'Sorry—something went wrong. Please try again.';
+          console.error('[frontend] Submit error:', data);
+        }
     } catch (err) {
       if (msg) msg.textContent = 'Network error—please try again.';
       console.error(err);

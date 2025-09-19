@@ -68,43 +68,73 @@ export default {
 
       try {
         // 1) Save signup in D1
-        await env.DB.prepare(stmt).bind(...vals).run();
+		await env.DB.prepare(stmt).bind(...vals).run();
 
-        // 2) Send confirmation email via Resend (optional but recommended)
-        let email_sent = false;
-        let email_error = null;
+		// 2) Send confirmation email via Resend — with DEBUG logs
+		let email_sent = false;
+		let email_error = null;
 
-        try {
-          const emailRes = await fetch("https://api.resend.com/emails", {
-            method: "POST",
-            headers: {
-              "Authorization": `Bearer ${env.RESEND_API_KEY}`,  // set via: wrangler secret put RESEND_API_KEY
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              from: "iPythonTime <noreply@ipythontime.com>",     // must be a verified sender/domain in Resend
-              to: body.email,
-              subject: "Thanks for signing up with iPythonTime!",
-              html: `<p>Hi ${escapeHtml(body.student_name) || "there"},</p>
-                     <p>Thanks for signing up at iPythonTime! We’ll reach out soon with timeslots and next steps.</p>
-                     <p>– The iPythonTime Team</p>`
-            }),
-          });
+		const safeEmail = (body.email || "").toString();
+		const safeName  = (body.student_name || "").toString();
 
-          const emailJson = await emailRes.json().catch(() => null);
-          if (emailRes.ok) {
-            email_sent = true;
-          } else {
-            email_error = { status: emailRes.status, body: emailJson };
-            console.error("Email send failed:", email_error);
-          }
-        } catch (err) {
-          email_error = String(err);
-          console.error("Email send exception:", email_error);
-        }
+		console.log("[submit] inserting row OK; attempting email", {
+		  to: safeEmail,
+		  name: safeName.slice(0, 50) || null
+		});
 
-        // 3) Return success (include email status for visibility)
-        return json({ ok:true, email_sent, email_error }, 200, cors);
+		try {
+		  const payload = {
+			from: "iPythonTime <noreply@ipythontime.com>", // make sure this SENDER is verified in your provider
+			to: safeEmail,
+			subject: "Thanks for signing up with iPythonTime!",
+			html: `<p>Hi ${escapeHtml(safeName) || "there"},</p>
+				   <p>Thanks for signing up at iPythonTime! We’ll reach out soon with timeslots and next steps.</p>
+				   <p>– The iPythonTime Team</p>`
+		  };
+
+		  console.log("[submit] email payload preview", {
+			from: payload.from,
+			to: payload.to,
+			subject: payload.subject
+		  });
+
+		  const emailRes = await fetch("https://api.resend.com/emails", {
+			method: "POST",
+			headers: {
+			  "Authorization": `Bearer ${env.RESEND_API_KEY}`,
+			  "Content-Type": "application/json",
+			},
+			body: JSON.stringify(payload),
+		  });
+
+		  let emailText = "";
+		  try { emailText = await emailRes.text(); } catch {}
+
+		  // Log raw response (status + body) for diagnosis
+		  console.log("[submit] email API response", {
+			ok: emailRes.ok,
+			status: emailRes.status,
+			body: emailText?.slice(0, 500) || null
+		  });
+
+		  // Best-effort parse back to JSON for your frontend
+		  let emailJson = null;
+		  try { emailJson = JSON.parse(emailText); } catch {}
+
+		  if (emailRes.ok) {
+			email_sent = true;
+		  } else {
+			email_error = { status: emailRes.status, body: emailJson || emailText || null };
+			console.error("[submit] email send failed", email_error);
+		  }
+
+		} catch (err) {
+		  email_error = String(err);
+		  console.error("[submit] email send exception", email_error);
+		}
+
+		// 3) Return success (include email status for visibility)
+		return json({ ok: true, email_sent, email_error }, 200, cors);
 
       } catch (e) {
         return json({ ok:false, error:String(e) }, 500, cors);
