@@ -52,33 +52,45 @@ export default {
 		body.message ?? null,
 	  ];
 
-	  try {
-		// 1. Save signup in D1
+	  // 1) Save signup in D1 (you already do this above)
 		await env.DB.prepare(stmt).bind(...vals).run();
 
-		// 2. Send confirmation email via Resend
-		await fetch("https://api.resend.com/emails", {
-		  method: "POST",
-		  headers: {
-			"Authorization": `Bearer ${env.RESEND_API_KEY}`,  // secret you added
-			"Content-Type": "application/json",
-		  },
-		  body: JSON.stringify({
-			from: "iPythonTime <noreply@ipythontime.com>",   // must be verified sender
-			to: body.email,
-			subject: "Thanks for signing up with iPythonTime!",
-			html: `<p>Hi ${body.student_name || "there"},</p>
-				   <p>Thanks for signing up at iPythonTime! We’ll reach out soon with timeslots and next steps.</p>
-				   <p>– The iPythonTime Team</p>`
-		  }),
-		});
+		// 2) Send confirmation email (and check the response)
+		let email_sent = false;
+		let email_error = null;
 
-		// 3. Return success to the browser
-		return json({ ok:true }, 200, cors);
+		try {
+		  const emailRes = await fetch("https://api.resend.com/emails", {
+			method: "POST",
+			headers: {
+			  "Authorization": `Bearer ${env.RESEND_API_KEY}`,
+			  "Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+			  from: "iPythonTime <noreply@ipythontime.com>", // must be a verified sender in your provider
+			  to: body.email,
+			  subject: "Thanks for signing up with iPythonTime!",
+			  html: `<p>Hi ${body.student_name || "there"},</p>
+					 <p>Thanks for signing up at iPythonTime! We’ll reach out soon with timeslots and next steps.</p>
+					 <p>– The iPythonTime Team</p>`
+			}),
+		  });
 
-	  } catch (e) {
-		return json({ ok:false, error:String(e) }, 500, cors);
-	  }
+		  const emailJson = await emailRes.json().catch(() => null);
+		  if (emailRes.ok) {
+			email_sent = true;
+		  } else {
+			email_error = { status: emailRes.status, body: emailJson };
+			// Optional: log to Workers logs
+			console.error("Email send failed:", email_error);
+		  }
+		} catch (err) {
+		  email_error = String(err);
+		  console.error("Email send exception:", email_error);
+		}
+
+		// 3) Return success to the browser but include email status so you can see it while testing
+		return json({ ok: true, email_sent, email_error }, 200, cors);
 	}
 
     // ---- admin read example ----
