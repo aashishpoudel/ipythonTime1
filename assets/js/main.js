@@ -84,7 +84,7 @@ document.addEventListener('click', (e) => {
   if (!form) return;
 
   // TODO: replace with your real Workers URL:
-  const API_URL = 'https://<your-workers-subdomain>.workers.dev/api/submit';
+  const API_URL = "https://ipythontime-signup-api.ipythontime.workers.dev/api/submit";  // ← put YOUR workers.dev URL
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
