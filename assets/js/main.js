@@ -77,3 +77,56 @@ document.addEventListener('click', (e) => {
   if (isoEl) isoEl.value = data.iso2;
   if (dialEl) dialEl.value = `+${data.dialCode}`;
 })();
+
+(function () {
+  const form = document.getElementById('signupForm');
+  const msg  = document.getElementById('formMsg');
+  if (!form) return;
+
+  // TODO: replace with your real Workers URL:
+  const API_URL = 'https://<your-workers-subdomain>.workers.dev/api/submit';
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (msg) msg.textContent = 'Submitting…';
+
+    const countrySel = document.getElementById('country');
+    const payload = {
+      who_is_learning: form.whoislearning?.value || null,
+      student_name:    form.name?.value || null,
+      student_dob:     form.dob?.value || null,
+      parent_name:     null,
+      email:           form.email?.value || null,
+      phone:           form.phone?.value || null,
+      phone_country_iso: document.getElementById('phone_country_iso')?.value || null,
+      phone_dial_code:   document.getElementById('phone_dial_code')?.value || null,
+      country_iso:       countrySel?.value || null,
+      country_label:     countrySel?.selectedOptions?.[0]?.textContent || null,
+      message: [
+        form.city?.value ? `City: ${form.city.value}` : null,
+        form.preferred_time?.value ? `Preferred time: ${form.preferred_time.value}` : null,
+        form.learning_goal?.value ? `Goal: ${form.learning_goal.value}` : null,
+      ].filter(Boolean).join(' | ')
+    };
+
+    try {
+      const res  = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok && data.ok) {
+        if (msg) msg.textContent = 'Thanks! We received your request.';
+        form.reset();
+      } else {
+        if (msg) msg.textContent = 'Sorry—something went wrong. Please try again.';
+        console.error('Submit error:', data);
+      }
+    } catch (err) {
+      if (msg) msg.textContent = 'Network error—please try again.';
+      console.error(err);
+    }
+  });
+})();

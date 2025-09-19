@@ -1,0 +1,21 @@
+name = "ipythontime-signup-api"
+account_id = "8199cb7fe2c36a3c80db4d6ec305649c"   # 👈 add this
+main = "src/index.js"
+compatibility_date = "2024-09-01"
+
+# use your *.workers.dev URL first; you can add a custom route later
+
+[[d1_databases]]
+binding = "DB"                           # used in code
+database_name = "ipythontime_signups"    # the DB you created
+database_id = "7c9659e3-f9a4-43d1-8af2-c6f05ce0c154" #wrangler d1 list
+preview_database_id = "7c9659e3-f9a4-43d1-8af2-c6f05ce0c154"
+
+[vars]
+ADMIN_KEY = "change-this-to-a-long-random-string"
+ALLOWED_ORIGIN = "https://www.ipythontime.com"   # e.g. https://aashishpoudel.github.io/
+
+routes = [
+  { pattern = "ipythontime.com/api/*" },
+  { pattern = "www.ipythontime.com/api/*" }
+]
