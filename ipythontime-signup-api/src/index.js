@@ -25,40 +25,61 @@ export default {
 
 
     // ---- public submit endpoint ----
-    if (method === "POST" && new URL(url).pathname === "/api/submit") {
-      let body;
-      try { body = await request.json(); }
-      catch { return json({ ok:false, error:"Invalid JSON" }, 400, cors); }
+	if (method === "POST" && new URL(url).pathname === "/api/submit") {
+	  let body;
+	  try { body = await request.json(); }
+	  catch { return json({ ok:false, error:"Invalid JSON" }, 400, cors); }
 
-      if (!body?.email) return json({ ok:false, error:"Missing email" }, 400, cors);
+	  if (!body?.email) return json({ ok:false, error:"Missing email" }, 400, cors);
 
-      const stmt = `
-        INSERT INTO signups
-          (who_is_learning, student_name, student_dob, parent_name, email, phone,
-           phone_country_iso, phone_dial_code, country_iso, country_label, message)
-        VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11)
-      `;
-      const vals = [
-        body.who_is_learning ?? null,
-        body.student_name ?? null,
-        body.student_dob ?? null,
-        body.parent_name ?? null,
-        body.email ?? null,
-        body.phone ?? null,
-        body.phone_country_iso ?? null,
-        body.phone_dial_code ?? null,
-        body.country_iso ?? null,
-        body.country_label ?? null,
-        body.message ?? null,
-      ];
+	  const stmt = `
+		INSERT INTO signups
+		  (who_is_learning, student_name, student_dob, parent_name, email, phone,
+		   phone_country_iso, phone_dial_code, country_iso, country_label, message)
+		VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11)
+	  `;
+	  const vals = [
+		body.who_is_learning ?? null,
+		body.student_name ?? null,
+		body.student_dob ?? null,
+		body.parent_name ?? null,
+		body.email ?? null,
+		body.phone ?? null,
+		body.phone_country_iso ?? null,
+		body.phone_dial_code ?? null,
+		body.country_iso ?? null,
+		body.country_label ?? null,
+		body.message ?? null,
+	  ];
 
-      try {
-        await env.DB.prepare(stmt).bind(...vals).run();
-        return json({ ok:true }, 200, cors);
-      } catch (e) {
-        return json({ ok:false, error:String(e) }, 500, cors);
-      }
-    }
+	  try {
+		// 1. Save signup in D1
+		await env.DB.prepare(stmt).bind(...vals).run();
+
+		// 2. Send confirmation email via Resend
+		await fetch("https://api.resend.com/emails", {
+		  method: "POST",
+		  headers: {
+			"Authorization": `Bearer ${env.RESEND_API_KEY}`,  // secret you added
+			"Content-Type": "application/json",
+		  },
+		  body: JSON.stringify({
+			from: "iPythonTime <noreply@ipythontime.com>",   // must be verified sender
+			to: body.email,
+			subject: "Thanks for signing up with iPythonTime!",
+			html: `<p>Hi ${body.student_name || "there"},</p>
+				   <p>Thanks for signing up at iPythonTime! We’ll reach out soon with timeslots and next steps.</p>
+				   <p>– The iPythonTime Team</p>`
+		  }),
+		});
+
+		// 3. Return success to the browser
+		return json({ ok:true }, 200, cors);
+
+	  } catch (e) {
+		return json({ ok:false, error:String(e) }, 500, cors);
+	  }
+	}
 
     // ---- admin read example ----
     if (method === "GET" && new URL(url).pathname === "/api/admin/latest") {

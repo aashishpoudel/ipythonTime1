@@ -126,7 +126,7 @@ document.addEventListener('click', (e) => {
       const data = await res.json().catch(() => ({}));
 
       if (res.ok && data.ok) {
-        if (msg) msg.textContent = 'Thanks! We received your request.';
+        if (msg) msg.textContent = 'Thanks! We received your request and Email sent for confirmation. Someone from iPythonTime team will be in touch with you in Email or WhatsApp';
         form.reset();
       } else {
         if (msg) msg.textContent = 'Sorry—something went wrong. Please try again.';

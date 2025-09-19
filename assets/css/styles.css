@@ -57,6 +57,11 @@ nav a.cta{background:var(--brand);color:white} nav a.cta:hover{background:var(--
   border:1px solid var(--border);border-radius:.5rem
 }
 
+.required {
+  color: red;
+  margin-left: 2px;
+}
+
 /* Phone input widget width */
 .iti { width: 100%; }
 .iti__country-list { max-height: 260px; } /* comfortable scroll */
