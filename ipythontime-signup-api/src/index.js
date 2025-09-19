@@ -1,100 +1,118 @@
 export default {
   async fetch(request, env) {
     const { method, url, headers } = request;
-    const cors = {
-      "Access-Control-Allow-Origin": env.ALLOWED_ORIGIN,
-      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-      "Access-Control-Allow-Headers": "content-type, x-admin-key",
-    };
+
+    // CORS
+    const cors = (() => {
+      // allow either a single origin from env or a small allowlist
+      const origin = request.headers.get("Origin") || "";
+      const allowlist = new Set([
+        env.ALLOWED_ORIGIN || "https://www.ipythontime.com",
+      ]);
+      const allowOrigin = allowlist.has(origin) ? origin : [...allowlist][0];
+      return {
+        "Access-Control-Allow-Origin": allowOrigin,
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "content-type, x-admin-key",
+      };
+    })();
 
     if (method === "OPTIONS") return new Response(null, { headers: cors });
 
-    // ---- debug endpoint (checks D1 binding is live) ----
-    if (method === "GET" && new URL(url).pathname === "/api/debug") {
-	  const keys = Object.keys(env || {});
-	  const hasDB = !!env.DB;
-	  let probe = null;
-	  if (hasDB) {
-		try { probe = await env.DB.prepare("select 42 as x").first(); }
-		catch (e) { probe = String(e); }
-	  }
-	  return new Response(JSON.stringify({ hasDB, keys, probe }), {
-		headers: { "Content-Type": "application/json" }
-	  });
-	}
+    const pathname = new URL(url).pathname;
 
+    // ---- debug endpoint ----
+    if (method === "GET" && pathname === "/api/debug") {
+      const keys = Object.keys(env || {});
+      const hasDB = !!env.DB;
+      let probe = null;
+      if (hasDB) {
+        try {
+          probe = await env.DB.prepare("select 42 as x").first();
+        } catch (e) {
+          probe = String(e);
+        }
+      }
+      return new Response(JSON.stringify({ hasDB, keys, probe }), {
+        headers: { "Content-Type": "application/json", ...cors },
+      });
+    }
 
     // ---- public submit endpoint ----
-	if (method === "POST" && new URL(url).pathname === "/api/submit") {
-	  let body;
-	  try { body = await request.json(); }
-	  catch { return json({ ok:false, error:"Invalid JSON" }, 400, cors); }
+    if (method === "POST" && pathname === "/api/submit") {
+      let body;
+      try { body = await request.json(); }
+      catch { return json({ ok:false, error:"Invalid JSON" }, 400, cors); }
 
-	  if (!body?.email) return json({ ok:false, error:"Missing email" }, 400, cors);
+      if (!body?.email) return json({ ok:false, error:"Missing email" }, 400, cors);
 
-	  const stmt = `
-		INSERT INTO signups
-		  (who_is_learning, student_name, student_dob, parent_name, email, phone,
-		   phone_country_iso, phone_dial_code, country_iso, country_label, message)
-		VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11)
-	  `;
-	  const vals = [
-		body.who_is_learning ?? null,
-		body.student_name ?? null,
-		body.student_dob ?? null,
-		body.parent_name ?? null,
-		body.email ?? null,
-		body.phone ?? null,
-		body.phone_country_iso ?? null,
-		body.phone_dial_code ?? null,
-		body.country_iso ?? null,
-		body.country_label ?? null,
-		body.message ?? null,
-	  ];
+      const stmt = `
+        INSERT INTO signups
+          (who_is_learning, student_name, student_dob, parent_name, email, phone,
+           phone_country_iso, phone_dial_code, country_iso, country_label, message)
+        VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11)
+      `;
+      const vals = [
+        body.who_is_learning ?? null,
+        body.student_name ?? null,
+        body.student_dob ?? null,
+        body.parent_name ?? null,
+        body.email ?? null,
+        body.phone ?? null,
+        body.phone_country_iso ?? null,
+        body.phone_dial_code ?? null,
+        body.country_iso ?? null,
+        body.country_label ?? null,
+        body.message ?? null,
+      ];
 
-	  // 1) Save signup in D1 (you already do this above)
-		await env.DB.prepare(stmt).bind(...vals).run();
+      try {
+        // 1) Save signup in D1
+        await env.DB.prepare(stmt).bind(...vals).run();
 
-		// 2) Send confirmation email (and check the response)
-		let email_sent = false;
-		let email_error = null;
+        // 2) Send confirmation email via Resend (optional but recommended)
+        let email_sent = false;
+        let email_error = null;
 
-		try {
-		  const emailRes = await fetch("https://api.resend.com/emails", {
-			method: "POST",
-			headers: {
-			  "Authorization": `Bearer ${env.RESEND_API_KEY}`,
-			  "Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-			  from: "iPythonTime <noreply@ipythontime.com>", // must be a verified sender in your provider
-			  to: body.email,
-			  subject: "Thanks for signing up with iPythonTime!",
-			  html: `<p>Hi ${body.student_name || "there"},</p>
-					 <p>Thanks for signing up at iPythonTime! We’ll reach out soon with timeslots and next steps.</p>
-					 <p>– The iPythonTime Team</p>`
-			}),
-		  });
+        try {
+          const emailRes = await fetch("https://api.resend.com/emails", {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${env.RESEND_API_KEY}`,  // set via: wrangler secret put RESEND_API_KEY
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              from: "iPythonTime <noreply@ipythontime.com>",     // must be a verified sender/domain in Resend
+              to: body.email,
+              subject: "Thanks for signing up with iPythonTime!",
+              html: `<p>Hi ${escapeHtml(body.student_name) || "there"},</p>
+                     <p>Thanks for signing up at iPythonTime! We’ll reach out soon with timeslots and next steps.</p>
+                     <p>– The iPythonTime Team</p>`
+            }),
+          });
 
-		  const emailJson = await emailRes.json().catch(() => null);
-		  if (emailRes.ok) {
-			email_sent = true;
-		  } else {
-			email_error = { status: emailRes.status, body: emailJson };
-			// Optional: log to Workers logs
-			console.error("Email send failed:", email_error);
-		  }
-		} catch (err) {
-		  email_error = String(err);
-		  console.error("Email send exception:", email_error);
-		}
+          const emailJson = await emailRes.json().catch(() => null);
+          if (emailRes.ok) {
+            email_sent = true;
+          } else {
+            email_error = { status: emailRes.status, body: emailJson };
+            console.error("Email send failed:", email_error);
+          }
+        } catch (err) {
+          email_error = String(err);
+          console.error("Email send exception:", email_error);
+        }
 
-		// 3) Return success to the browser but include email status so you can see it while testing
-		return json({ ok: true, email_sent, email_error }, 200, cors);
-	}
+        // 3) Return success (include email status for visibility)
+        return json({ ok:true, email_sent, email_error }, 200, cors);
 
-    // ---- admin read example ----
-    if (method === "GET" && new URL(url).pathname === "/api/admin/latest") {
+      } catch (e) {
+        return json({ ok:false, error:String(e) }, 500, cors);
+      }
+    }
+
+    // ---- admin read example (protected) ----
+    if (method === "GET" && pathname === "/api/admin/latest") {
       if (headers.get("x-admin-key") !== env.ADMIN_KEY)
         return new Response("Unauthorized", { status: 401, headers: cors });
 
@@ -114,4 +132,15 @@ function json(obj, status=200, headers={}) {
     status,
     headers: { "Content-Type":"application/json", ...headers }
   });
+}
+
+// very small HTML escape for safety in the email body
+function escapeHtml(s) {
+  if (!s) return "";
+  return String(s)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 }
