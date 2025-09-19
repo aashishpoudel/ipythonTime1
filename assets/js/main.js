@@ -88,6 +88,14 @@ document.addEventListener('click', (e) => {
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    // ✅ Custom validation for Full Name
+    const nameField = form.name;
+    if (!nameField.value.trim()) {
+        if (msg) msg.textContent = 'Full Name is required.';
+        nameField.focus();
+        return; // stop here, don’t submit
+    }
+
     if (msg) msg.textContent = 'Submitting…';
 
     const countrySel = document.getElementById('country');
