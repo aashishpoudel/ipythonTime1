@@ -1,10 +1,8 @@
-
 function toggleMenu() {
   const drawer = document.getElementById('drawer');
   if (drawer) drawer.classList.toggle('open');
 }
 document.getElementById('year').textContent = new Date().getFullYear();
-
 
 document.addEventListener('click', (e) => {
   const btn = e.target.closest('.menu');
@@ -22,9 +20,10 @@ document.addEventListener('click', (e) => {
 
   // 1) Init phone input (flag + dial code)
   const iti = window.intlTelInput(phoneInput, {
-    initialCountry: "us",          // pick whatever default you prefer
-    separateDialCode: true,        // shows “+1” separate from the number
-    utilsScript: undefined         // already loaded via separate <script>
+    initialCountry: "us",          // default to United States
+    preferredCountries: ["us"],    // keep US at the top
+    separateDialCode: true,
+    utilsScript: undefined
   });
 
   // Helper: ISO alpha-2 -> flag emoji (🇺🇸 🇮🇳 etc.)
@@ -35,42 +34,36 @@ document.addEventListener('click', (e) => {
   }
 
   // 2) Populate Country <select> using the same data as the phone widget
-  //    This guarantees a full list with consistent names and ISO codes.
   const allCountries = window.intlTelInputGlobals.getCountryData();
-  // Sort by name for a nice UX
   allCountries.sort((a, b) => a.name.localeCompare(b.name));
 
-  // Build options (e.g., "🇺🇸 United States")
   countrySelect.innerHTML = '';
   for (const c of allCountries) {
     const opt = document.createElement('option');
-    opt.value = c.iso2; // store ISO (e.g., "us")
+    opt.value = c.iso2;
     opt.textContent = `${isoToFlag(c.iso2)} ${c.name}`;
     countrySelect.appendChild(opt);
   }
 
-  // Set select to match the phone’s initial country
-  countrySelect.value = iti.getSelectedCountryData().iso2;
+  // Force default selection to United States
+  countrySelect.value = "us";
 
-  // 3) Keep them in sync (Country <-> Phone)
-  // When Country changes, update phone widget country
+  // 3) Keep them in sync
   countrySelect.addEventListener('change', () => {
     iti.setCountry(countrySelect.value);
   });
 
-  // When phone widget country changes (via its own dropdown), update Country select
   phoneInput.addEventListener('countrychange', () => {
     const data = iti.getSelectedCountryData();
     countrySelect.value = data.iso2;
 
-    // Optional hidden fields if you want these on submit:
     const isoEl = document.getElementById('phone_country_iso');
     const dialEl = document.getElementById('phone_dial_code');
-    if (isoEl) isoEl.value = data.iso2;          // e.g., "us"
-    if (dialEl) dialEl.value = `+${data.dialCode}`; // e.g., "+1"
+    if (isoEl) isoEl.value = data.iso2;
+    if (dialEl) dialEl.value = `+${data.dialCode}`;
   });
 
-  // 4) On first load, set hidden fields too (if present)
+  // 4) On first load, set hidden fields too
   const data = iti.getSelectedCountryData();
   const isoEl = document.getElementById('phone_country_iso');
   const dialEl = document.getElementById('phone_dial_code');
@@ -83,26 +76,26 @@ document.addEventListener('click', (e) => {
   const msg  = document.getElementById('formMsg');
   if (!form) return;
 
-  // Auto-detect IANA timezone, e.g., "America/Phoenix"
-    document.addEventListener('DOMContentLoaded', () => {
-      const tzEl = document.getElementById('timezone');
-      if (tzEl && !tzEl.value) {
-        try { tzEl.value = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; }
-        catch { tzEl.value = ""; }
-      }
-    });
+  // Auto-detect IANA timezone
+  document.addEventListener('DOMContentLoaded', () => {
+    const tzEl = document.getElementById('timezone');
+    if (tzEl && !tzEl.value) {
+      try { tzEl.value = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; }
+      catch { tzEl.value = ""; }
+    }
+  });
 
-  // TODO: replace with your real Workers URL:
-  const API_URL = "https://ipythontime-signup-api.ipythontime.workers.dev/api/submit";  // ← put YOUR workers.dev URL
+  const API_URL = "https://ipythontime-signup-api.ipythontime.workers.dev/api/submit";
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    // ✅ Custom validation for Full Name
+
+    // Validate Full Name
     const nameField = form.name;
     if (!nameField.value.trim()) {
-        if (msg) msg.textContent = 'Full Name is required.';
-        nameField.focus();
-        return; // stop here, don’t submit
+      if (msg) msg.textContent = 'Full Name is required.';
+      nameField.focus();
+      return;
     }
 
     if (msg) msg.textContent = 'Submitting…';
@@ -138,18 +131,32 @@ document.addEventListener('click', (e) => {
 
       console.log("[frontend] API response", data);
 
-        if (res.ok && data.ok) {
-          if (data.email_sent) {
-            if (msg) msg.textContent = 'Thanks! We received your request and sent a confirmation email.';
-          } else {
-            if (msg) msg.textContent = 'Thanks! We received your request. (Email did not send yet.)';
-            console.warn("[frontend] email_error", data.email_error);
-          }
-          form.reset();
+      if (res.ok && data.ok) {
+        const hasFlags =
+          Object.prototype.hasOwnProperty.call(data, "email_user_sent") ||
+          Object.prototype.hasOwnProperty.call(data, "email_admin_sent");
+
+        const anyEmailSent = hasFlags
+          ? !!(data.email_user_sent || data.email_admin_sent)
+          : null;
+
+        if (anyEmailSent === true) {
+          if (msg) msg.textContent = 'Thanks! We received your request and sent a confirmation email.';
+        } else if (anyEmailSent === false) {
+          if (msg) msg.textContent = 'Thanks! We received your request. (Email did not send yet.)';
+          console.warn("[frontend] email errors", {
+            user: data.email_user_error,
+            admin: data.email_admin_error
+          });
         } else {
-          if (msg) msg.textContent = 'Sorry—something went wrong. Please try again.';
-          console.error('[frontend] Submit error:', data);
+          if (msg) msg.textContent = 'Thanks! We received your request. We’ll contact you shortly.';
         }
+
+        form.reset();
+      } else {
+        if (msg) msg.textContent = 'Sorry—something went wrong. Please try again.';
+        console.error('[frontend] Submit error:', data);
+      }
     } catch (err) {
       if (msg) msg.textContent = 'Network error—please try again.';
       console.error(err);

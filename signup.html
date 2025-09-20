@@ -45,15 +45,24 @@
           <span>Full Name <span class="required">*</span></span>
           <input type="text" name="name" required placeholder="Student name" />
         </label>
-        <label>Date of Birth
-          <input name="dob" type="date" required />
-        </label>
         <div class="grid-2">
-          <label>City
-            <input type="text" name="city" id="city" placeholder="Your city" />
+          <label>Date of Birth
+            <input name="dob" type="date" required />
           </label>
           <label>Country
             <select id="country" name="country" required></select>
+          </label>
+        </div>
+
+        <div class="grid-2">
+          <label>State/Province
+            <select id="state" name="state">
+              <option value="">Select…</option>
+              <!-- (Optional) You can populate US states via JS later -->
+            </select>
+          </label>
+          <label>City
+            <input type="text" name="city" id="city" placeholder="Your city" />
           </label>
         </div>
       </fieldset>

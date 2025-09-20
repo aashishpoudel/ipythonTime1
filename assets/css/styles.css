@@ -138,6 +138,16 @@ nav a.cta{background:var(--brand);color:white} nav a.cta:hover{background:var(--
   z-index: 1000;
 }
 
+/* Make the datepicker calendar icon bigger */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  transform: scale(2);        /* twice as big */
+  transform-origin: center;   /* keep it centered */
+}
+
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-clear-button {
+  transform: scale(1.5);      /* optional: enlarge arrows/clear buttons */
+}
 
 /* When opened, slide in */
 .site-header nav.drawer.open {
