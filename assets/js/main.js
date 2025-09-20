@@ -83,6 +83,15 @@ document.addEventListener('click', (e) => {
   const msg  = document.getElementById('formMsg');
   if (!form) return;
 
+  // Auto-detect IANA timezone, e.g., "America/Phoenix"
+    document.addEventListener('DOMContentLoaded', () => {
+      const tzEl = document.getElementById('timezone');
+      if (tzEl && !tzEl.value) {
+        try { tzEl.value = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; }
+        catch { tzEl.value = ""; }
+      }
+    });
+
   // TODO: replace with your real Workers URL:
   const API_URL = "https://ipythontime-signup-api.ipythontime.workers.dev/api/submit";  // ← put YOUR workers.dev URL
 
@@ -110,6 +119,8 @@ document.addEventListener('click', (e) => {
       phone_dial_code:   document.getElementById('phone_dial_code')?.value || null,
       country_iso:       countrySel?.value || null,
       country_label:     countrySel?.selectedOptions?.[0]?.textContent || null,
+      city:            form.city?.value || null,
+      timezone:        form.timezone?.value || null,
       message: [
         form.city?.value ? `City: ${form.city.value}` : null,
         form.preferred_time?.value ? `Preferred time: ${form.preferred_time.value}` : null,

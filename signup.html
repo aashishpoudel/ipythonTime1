@@ -50,7 +50,7 @@
         </label>
         <div class="grid-2">
           <label>City
-            <input name="city" required placeholder="San Diego" />
+            <input type="text" name="city" id="city" placeholder="Your city" />
           </label>
           <label>Country
             <select id="country" name="country" required></select>
@@ -86,6 +86,7 @@
           <textarea name="learning_goal" rows="4" required placeholder="e.g., fundamentals, build games, homework help"></textarea>
         </label>
       </fieldset>
+      <input type="hidden" name="timezone" id="timezone" />
 
       <button class="btn" type="submit">Submit</button>
     </form>
