@@ -85,13 +85,12 @@
 
       <fieldset class="fieldset">
         <legend>Preferences</legend>
-        <label>Preferred Time
-          <select name="preferred_time" required>
-            <option value="weekday_afternoon">Weekday afternoon</option>
-            <option value="weekday_evening">Weekday evening</option>
-            <option value="weekend">Weekend</option>
-          </select>
-        </label>
+        <label for="preferred_time">Preferred Time</label>
+        <select id="preferred_time" name="preferred_time" multiple>
+          <option value="weekend">Weekend</option>
+          <option value="weekday afternoon">Weekday Afternoon</option>
+          <option value="weekday evening">Weekday Evening</option>
+        </select>
         <label>Learning Goal
           <textarea name="learning_goal" rows="4" required placeholder="e.g., fundamentals, build games, homework help"></textarea>
         </label>

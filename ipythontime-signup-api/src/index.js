@@ -46,33 +46,36 @@ export default {
 
       if (!body?.email) return json({ ok:false, error:"Missing email" }, 400, cors);
 
-      const stmt = `
+      // 1) Build the SQL (DEFINE THE VARIABLE)
+		const stmt = `
 		  INSERT INTO signups
-			 (who_is_learning, student_name, student_dob, parent_name, email, phone,
-			  phone_country_iso, phone_dial_code, country_iso, country_label,
-			  state,                                   -- ✅ add
-			  city, timezone, message)
+		   (who_is_learning, student_name, student_dob, parent_name, email, phone,
+			phone_country_iso, phone_dial_code, country_iso, country_label,
+			state,
+			city, timezone, preferred_time, message)
 		  VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,
-				  ?11,                                  -- ✅ add
-				  ?12,?13,?14)
+				  ?11,
+				  ?12,?13,?14,?15)
 		`;
 
-	  const vals = [
-		body.who_is_learning ?? null,
-		body.student_name ?? null,
-		body.student_dob ?? null,
-		body.parent_name ?? null,
-		body.email ?? null,
-		body.phone ?? null,
-		body.phone_country_iso ?? null,
-		body.phone_dial_code ?? null,
-		body.country_iso ?? null,
-		body.country_label ?? null,
-		(body.state ?? body.state_label ?? null),
-		body.city ?? null,
-		body.timezone ?? null,
-		body.message ?? null,
-	  ];
+		// 2) Keep your existing vals (already correct)
+		const vals = [
+		  body.who_is_learning ?? null,
+		  body.student_name ?? null,
+		  body.student_dob ?? null,
+		  body.parent_name ?? null,
+		  body.email ?? null,
+		  body.phone ?? null,
+		  body.phone_country_iso ?? null,
+		  body.phone_dial_code ?? null,
+		  body.country_iso ?? null,
+		  body.country_label ?? null,
+		  (body.state ?? body.state_label ?? null),
+		  body.city ?? null,
+		  body.timezone ?? null,
+		  (body.preferred_time ?? null),  // <- this gets saved
+		  body.message ?? null,
+		];
 
       try {
         // 1) Save signup in D1
@@ -132,6 +135,7 @@ export default {
 				  <tr><td><b>State/Province</b></td><td>${escapeHtml(body.state || body.state_label || "")}</td></tr>
 				  <tr><td><b>City</b></td><td>${escapeHtml(body.city || "")}</td></tr>
 				  <tr><td><b>Timezone</b></td><td>${escapeHtml(body.timezone || "")}</td></tr>
+				  <tr><td><b>Preferred Time</b></td><td>${escapeHtml(body.preferred_time || "")}</td></tr>
 				  <tr><td><b>Message</b></td><td>${escapeHtml(body.message || "")}</td></tr>
 				  <tr><td><b>Submitted at</b></td><td>${new Date().toISOString()}</td></tr>
 				</table>
