@@ -169,12 +169,6 @@ document.addEventListener('click', (e) => {
     // add to payload
     payload.preferred_time = ptJoin;
 
-    // also reflect in the human-readable message preview
-    if (times.length) {
-      payload.message = [payload.message, `Preferred time: ${times.join(', ')}`]
-        .filter(Boolean).join(' | ');
-    }
-
     try {
       const res  = await fetch(API_URL, {
         method: 'POST',
