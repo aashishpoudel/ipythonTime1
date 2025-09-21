@@ -175,7 +175,7 @@ export default {
         return new Response("Unauthorized", { status: 401, headers: cors });
 
       const { results } = await env.DB.prepare(`
-        SELECT id, created_at, student_name, email, phone_dial_code, phone, country_iso, state
+        SELECT id, created_at, student_name, email, phone_dial_code, phone, country_iso, state, city
         FROM signups ORDER BY id DESC LIMIT 50
       `).all();
       return json({ ok:true, results }, 200, cors);
