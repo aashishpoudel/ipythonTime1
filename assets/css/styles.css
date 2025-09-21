@@ -188,3 +188,17 @@ input[type="date"]::-webkit-clear-button {
 @media (max-width: 640px) {
   .pricing { grid-template-columns: 1fr; }
 }
+
+/* Fix Date + Country overlap on small screens */
+@media (max-width: 640px) {
+  .grid-2 label {
+    flex: 1 1 48%;       /* let them shrink to about half each */
+  }
+  .grid-2 input[type="date"] {
+    width: 95%;          /* shrink date field width */
+  }
+  #country {
+    width: 100%;         /* fill its half */
+    text-align: right;   /* keep option text right aligned */
+  }
+}
