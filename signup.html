@@ -31,8 +31,6 @@
     <h1>Sign-up</h1>
     <p>Tell us about the learner. We’ll reach out with timeslots and next steps.</p>
     <form id="signupForm" class="form">
-<!--      <button class="btn" type="submit">Submit</button>-->
-<!--      <p id="formMsg" role="status" aria-live="polite"></p>-->
       <fieldset class="fieldset">
         <legend>Student</legend>
         <label>Who is learning?
@@ -45,15 +43,23 @@
           <span>Full Name <span class="required">*</span></span>
           <input type="text" name="name" required placeholder="Student name" />
         </label>
-        <label>Date of Birth
-          <input name="dob" type="date" required />
-        </label>
         <div class="grid-2">
-          <label>City
-            <input name="city" required placeholder="San Diego" />
+          <label>Date of Birth
+            <input name="dob" type="date" required />
           </label>
           <label>Country
             <select id="country" name="country" required></select>
+          </label>
+        </div>
+
+        <div class="grid-2">
+          <label>State/Province
+            <select id="state" name="state">
+              <option value="">Select…</option>
+            </select>
+          </label>
+          <label>City
+            <input type="text" name="city" id="city" placeholder="Your city" />
           </label>
         </div>
       </fieldset>
@@ -67,7 +73,6 @@
           <label>Phone (WhatsApp enabled)
             <input id="phone" name="phone" type="tel" placeholder="(555) 555-5555" />
           </label>
-          <!-- Optional hidden fields if you want to capture extras on submit -->
           <input type="hidden" name="phone_country_iso" id="phone_country_iso" />
           <input type="hidden" name="phone_dial_code" id="phone_dial_code" />
         </div>
@@ -86,21 +91,153 @@
           <textarea name="learning_goal" rows="4" required placeholder="e.g., fundamentals, build games, homework help"></textarea>
         </label>
       </fieldset>
+      <input type="hidden" name="timezone" id="timezone" />
 
       <button class="btn" type="submit">Submit</button>
     </form>
     <p id="formMsg" role="status" aria-live="polite"></p>
   </main>
 
-
   <footer class="site-footer">
     <div class="container">
       <p>&copy; <span id="year"></span> iPythonTime — All rights reserved.</p>
     </div>
   </footer>
+  <!-- Prefer the official UMD; keep your original as last resort -->
+  <script src="https://cdn.jsdelivr.net/npm/country-state-city@3.1.1/dist/country-state-city.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/country-state-city-js@3.1.1/dist/index.min.js"></script>
+  <script>
+    // Minimal embedded fallback datasets for when the CDN fails or exposes a different global
+    const FALLBACK_COUNTRIES = [
+      { isoCode: "US", name: "United States" },
+      { isoCode: "CA", name: "Canada" },
+      { isoCode: "IN", name: "India" },
+      { isoCode: "AU", name: "Australia" }, // ← add
+      { isoCode: "CN", name: "China" }      // ← add
+    ];
+    const FALLBACK_STATES = {
+      US: ["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","District of Columbia","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"],
+      CA: ["Alberta","British Columbia","Manitoba","New Brunswick","Newfoundland and Labrador","Northwest Territories","Nova Scotia","Nunavut","Ontario","Prince Edward Island","Quebec","Saskatchewan","Yukon"],
+      AU: ["Australian Capital Territory","New South Wales","Northern Territory","Queensland","South Australia","Tasmania","Victoria","Western Australia"],
+      CN: ["Anhui","Beijing","Chongqing","Fujian","Gansu","Guangdong","Guangxi","Guizhou","Hainan","Hebei","Heilongjiang","Henan","Hubei","Hunan","Inner Mongolia","Jiangsu","Jiangxi","Jilin","Liaoning","Ningxia","Qinghai","Shaanxi","Shandong","Shanghai","Shanxi","Sichuan","Tianjin","Tibet","Xinjiang","Yunnan","Zhejiang","Hong Kong SAR","Macau SAR"]
+    };
+  </script>
+  <script>
+    (() => {
+      // Try to find the CSC API
+      const g =
+        (window.country_state_city) ||
+        (window.csc) ||
+        (window.CountryStateCity) ||
+        (window.CSC) ||
+        (window.CSCjs) || null;
+
+      // Normalize API
+      const Country = g && (g.Country || g.default?.Country);
+      const State   = g && (g.State   || g.default?.State);
+      const getAllCountries   = Country?.getAllCountries || g?.getAllCountries;
+      const getStatesOfCountry= State?.getStatesOfCountry || g?.getStatesOfCountry;
+
+      const countryEl = document.getElementById('country');
+      const stateEl   = document.getElementById('state');
+      stateEl?.removeAttribute('required');
+
+      // Populate countries from CSC or fallback
+      function populateCountries() {
+        let countries = [];
+        if (typeof getAllCountries === 'function') {
+          try { countries = getAllCountries() || []; } catch(e){ countries = []; }
+        }
+        if (!countries.length) countries = FALLBACK_COUNTRIES;
+
+        countryEl.innerHTML = '<option value="">— Select —</option>';
+        countries.forEach(c => {
+          const iso = c.isoCode || c.iso || c.code || c.name;
+          const name = c.name || c.countryName || String(iso);
+          const opt = document.createElement('option');
+          opt.value = iso;
+          opt.textContent = name;
+          countryEl.appendChild(opt);
+        });
+
+        // Default to US if present
+        if (countryEl.querySelector('option[value="US"]')) {
+          countryEl.value = "US";
+        }
+      }
+
+      function disableState(placeholder = "— Not applicable —") {
+        stateEl.innerHTML = "";
+        const opt = document.createElement('option');
+        opt.value = "";
+        opt.textContent = placeholder;
+        stateEl.appendChild(opt);
+        stateEl.disabled = true;
+      }
+
+      function enableState(states) {
+        stateEl.innerHTML = "";
+        const first = document.createElement('option');
+        first.value = "";
+        first.textContent = "— Select —";
+        stateEl.appendChild(first);
+        states.forEach(name => {
+          const opt = document.createElement('option');
+          opt.value = name;
+          opt.textContent = name;
+          stateEl.appendChild(opt);
+        });
+        stateEl.disabled = false;
+      }
+
+      function getCountryISO() {
+        const v = (countryEl.value || "").trim();
+        if (!v) return "";
+        if (/^[A-Z]{2}$/i.test(v)) return v.toUpperCase();
+        // Try resolve name → iso from CSC or fallback
+        let countries = [];
+        if (typeof getAllCountries === 'function') {
+          try { countries = getAllCountries() || []; } catch(e){}
+        }
+        if (!countries.length) countries = FALLBACK_COUNTRIES;
+        const hit = countries.find(c => (c.name||"").toLowerCase() === v.toLowerCase());
+        return hit ? (hit.isoCode || v) : "";
+      }
+
+      function handleCountryChange() {
+        const iso = getCountryISO();
+        if (!iso) { disableState("— Select country first —"); return; }
+
+        // Prefer CSC; fallback to embedded
+        let items = null;
+        if (typeof getStatesOfCountry === 'function') {
+          try {
+            const rows = getStatesOfCountry(iso) || [];
+            if (rows.length) items = rows.map(r => r.name);
+          } catch(e){ /* ignore */ }
+        }
+        if (!items) items = FALLBACK_STATES[iso];
+
+        if (items && items.length) enableState(items.sort((a,b)=>a.localeCompare(b)));
+        else disableState("— Not applicable —");
+      }
+
+      // Init
+      populateCountries();
+      handleCountryChange();
+      countryEl.addEventListener('change', () => {
+        handleCountryChange();
+      });
+
+      // If some other script repopulates the country list later, re-sync
+      const obs = new MutationObserver(() => {
+        handleCountryChange();
+      });
+      obs.observe(countryEl, { childList: true, subtree: true });
+    })();
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@19.5.6/build/js/intlTelInput.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@19.5.6/build/js/utils.js"></script>
   <script src="assets/js/main.js"></script>
-
 </body>
 </html>
