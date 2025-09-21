@@ -81,6 +81,10 @@
           <input type="hidden" name="phone_country_iso" id="phone_country_iso" />
           <input type="hidden" name="phone_dial_code" id="phone_dial_code" />
         </div>
+        <label>
+          <span>Parent Name</span>
+          <input type="text" id="parent_name" name="parent_name" placeholder="— Not applicable —" disabled />
+        </label>
       </fieldset>
 
       <fieldset class="fieldset">
@@ -92,7 +96,7 @@
           <option value="weekday evening">Weekday Evening</option>
         </select>
         <label>Learning Goal
-          <textarea name="learning_goal" rows="4" required placeholder="e.g., fundamentals, build games, homework help"></textarea>
+          <textarea name="goal" rows="4" required placeholder="e.g., fundamentals, build games, homework help"></textarea>
         </label>
       </fieldset>
       <input type="hidden" name="timezone" id="timezone" />
@@ -116,8 +120,8 @@
       { isoCode: "US", name: "United States" },
       { isoCode: "CA", name: "Canada" },
       { isoCode: "IN", name: "India" },
-      { isoCode: "AU", name: "Australia" }, // ← add
-      { isoCode: "CN", name: "China" }      // ← add
+      { isoCode: "AU", name: "Australia" },
+      { isoCode: "CN", name: "China" }
     ];
     const FALLBACK_STATES = {
       US: ["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","District of Columbia","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"],

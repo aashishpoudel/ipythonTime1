@@ -52,10 +52,10 @@ export default {
 		   (who_is_learning, student_name, student_dob, parent_name, email, phone,
 			phone_country_iso, phone_dial_code, country_iso, country_label,
 			state,
-			city, timezone, preferred_time, message)
+			city, timezone, preferred_time, goal, comment)
 		  VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,
 				  ?11,
-				  ?12,?13,?14,?15)
+				  ?12,?13,?14,?15,?16)
 		`;
 
 		// 2) Keep your existing vals (already correct)
@@ -74,12 +74,18 @@ export default {
 		  body.city ?? null,
 		  body.timezone ?? null,
 		  (body.preferred_time ?? null),  // <- this gets saved
-		  body.message ?? null,
+		  body.goal ?? null,
+		  body.comment ?? null,
 		];
 
       try {
         // 1) Save signup in D1
 		await env.DB.prepare(stmt).bind(...vals).run();
+
+		// Fetch full signups table ordered by id DESC
+		const allRows = await env.DB.prepare(
+		  "SELECT * FROM signups ORDER BY id DESC"
+		).all();
 
 		// 2) EMAILS (two separate sends via Resend)
 		let email_user_sent = false,  email_user_error = null;
@@ -136,9 +142,13 @@ export default {
 				  <tr><td><b>City</b></td><td>${escapeHtml(body.city || "")}</td></tr>
 				  <tr><td><b>Timezone</b></td><td>${escapeHtml(body.timezone || "")}</td></tr>
 				  <tr><td><b>Preferred Time</b></td><td>${escapeHtml(body.preferred_time || "")}</td></tr>
-				  <tr><td><b>Message</b></td><td>${escapeHtml(body.message || "")}</td></tr>
+				  <tr><td><b>Goal</b></td><td>${escapeHtml(body.goal || "")}</td></tr>
+				  <tr><td><b>Comment</b></td><td>${escapeHtml(body.comment || "")}</td></tr>
 				  <tr><td><b>Submitted at</b></td><td>${new Date().toISOString()}</td></tr>
 				</table>
+				<hr/>
+			    <h2>All Signups (latest first)</h2>
+			    ${renderTable(allRows)}
 			  `
 			};
 		  console.log("[submit] sending admin email", { to: adminPayload.to });
@@ -206,3 +216,27 @@ function escapeHtml(s) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
 }
+
+function renderTable(rows) {
+  if (!rows || !rows.results?.length) return "<p>No signups yet.</p>";
+
+  const headers = Object.keys(rows.results[0])
+    .map(h => `<th>${h}</th>`)
+    .join("");
+
+  const body = rows.results
+    .map(r =>
+      `<tr>${Object.values(r)
+        .map(v => `<td>${escapeHtml(v ?? "")}</td>`)
+        .join("")}</tr>`
+    )
+    .join("");
+
+  return `
+    <table border="1" cellspacing="0" cellpadding="4">
+      <thead><tr>${headers}</tr></thead>
+      <tbody>${body}</tbody>
+    </table>
+  `;
+}
+

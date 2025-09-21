@@ -57,6 +57,12 @@ nav a.cta{background:var(--brand);color:white} nav a.cta:hover{background:var(--
   border:1px solid var(--border);border-radius:.5rem
 }
 
+.form input[disabled]{
+  background:#f8fafc;
+  color:#9ca3af;
+  cursor:not-allowed;
+}
+
 .required {
   color: red;
   margin-left: 2px;
