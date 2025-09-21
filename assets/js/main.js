@@ -167,3 +167,92 @@ document.addEventListener('click', (e) => {
     }
   });
 })();
+
+// ---- Timezone from Country / (optional) State ----
+(function () {
+  const countryEl = document.getElementById('country');   // <select id="country">
+  const stateEl   = document.getElementById('state');     // <select id="state"> (optional)
+  const tzEl      = document.getElementById('timezone');  // <input type="hidden" id="timezone">
+  const form      = document.getElementById('signupForm');
+
+  if (!countryEl || !tzEl) return;
+
+  // Geocode helper (Nominatim / OpenStreetMap)
+  async function geocode(query) {
+    const url = new URL('https://nominatim.openstreetmap.org/search');
+    url.searchParams.set('q', query);
+    url.searchParams.set('format', 'json');
+    url.searchParams.set('limit', '1');
+    url.searchParams.set('addressdetails', '1');
+    const res = await fetch(url.toString(), { headers: { 'Accept': 'application/json' } });
+    if (!res.ok) throw new Error('geocode failed');
+    const arr = await res.json();
+    return arr[0] || null;
+  }
+
+  function setTimezone(zone) {
+    if (tzEl) tzEl.value = zone || '';
+  }
+
+  function selectedCountryLabel() {
+    // Your <select id="country"> is populated with ISO2 values; text may include a flag.
+    // Get the visible name and strip leading emoji if present.
+    const raw = countryEl.selectedOptions?.[0]?.textContent || countryEl.value || '';
+    return raw.replace(/^\p{Emoji_Presentation}|\p{Emoji}\uFE0F?\s*/gu, '').trim();
+  }
+
+  async function recomputeTimezone() {
+    const countryISO  = (countryEl.value || '').toUpperCase();
+    const countryName = selectedCountryLabel();
+    const stateName   = (stateEl && stateEl.value ? stateEl.value.trim() : '');
+
+    try {
+      // If state/province present → geocode "state, country" → tz from lat/lon
+      if (stateName) {
+        const place = await geocode(`${stateName}, ${countryName}`);
+        if (place) {
+          const zone = tzlookup(parseFloat(place.lat), parseFloat(place.lon));
+          setTimezone(zone);
+          return;
+        }
+      }
+
+      // Otherwise country-only: try centroid → tz
+      const countryPlace = await geocode(countryName);
+      if (countryPlace) {
+        const zone = tzlookup(parseFloat(countryPlace.lat), parseFloat(countryPlace.lon));
+        setTimezone(zone);
+        return;
+      }
+
+      // Last-resort list-based fallback: first time zone known for the ISO2
+      if (window.ct && countryISO) {
+        const zones = ct.getTimezonesForCountry(countryISO) || [];
+        if (zones.length) {
+          setTimezone(zones[0].aliasOf || zones[0].name);
+          return;
+        }
+      }
+
+      // If all else fails, leave the browser guess (set earlier in your file)
+    } catch (err) {
+      console.warn('[timezone] fallback to browser time zone:', err);
+    }
+  }
+
+  // Recompute whenever the user changes country/state
+  countryEl.addEventListener('change', recomputeTimezone);
+  stateEl?.addEventListener('change', recomputeTimezone);
+
+  // Recompute on first paint (after your initial Intl guess)
+  document.addEventListener('DOMContentLoaded', recomputeTimezone);
+
+  // Ensure a computed zone right before submit; if empty, compute and then submit
+  form?.addEventListener('submit', (e) => {
+    if (!tzEl.value) {
+      e.preventDefault();
+      recomputeTimezone().then(() => form.submit());
+    }
+  });
+})();
+
