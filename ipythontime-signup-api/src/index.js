@@ -52,10 +52,10 @@ export default {
 		   (who_is_learning, student_name, student_dob, parent_name, email, phone,
 			phone_country_iso, phone_dial_code, country_iso, country_label,
 			state,
-			city, timezone, preferred_time, goal)
+			city, timezone, preferred_time, goal, comment)
 		  VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,
 				  ?11,
-				  ?12,?13,?14,?15)
+				  ?12,?13,?14,?15,?16)
 		`;
 
 		// 2) Keep your existing vals (already correct)
@@ -75,6 +75,7 @@ export default {
 		  body.timezone ?? null,
 		  (body.preferred_time ?? null),  // <- this gets saved
 		  body.goal ?? null,
+		  body.comment ?? null,
 		];
 
       try {
@@ -141,7 +142,8 @@ export default {
 				  <tr><td><b>City</b></td><td>${escapeHtml(body.city || "")}</td></tr>
 				  <tr><td><b>Timezone</b></td><td>${escapeHtml(body.timezone || "")}</td></tr>
 				  <tr><td><b>Preferred Time</b></td><td>${escapeHtml(body.preferred_time || "")}</td></tr>
-				  <tr><td><b>Goal</b></td><td>${escapeHtml(body.message || "")}</td></tr>
+				  <tr><td><b>Goal</b></td><td>${escapeHtml(body.goal || "")}</td></tr>
+				  <tr><td><b>Comment</b></td><td>${escapeHtml(body.comment || "")}</td></tr>
 				  <tr><td><b>Submitted at</b></td><td>${new Date().toISOString()}</td></tr>
 				</table>
 				<hr/>

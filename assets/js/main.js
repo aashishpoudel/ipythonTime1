@@ -158,7 +158,8 @@ document.addEventListener('click', (e) => {
       timezone:        form.timezone?.value || null,
       goal: [
         form.goal?.value ? `${form.goal.value}` : null,
-      ].filter(Boolean).join(' | ')
+      ].filter(Boolean).join(' | '),
+      comment: (form.comment?.value?.trim?.() || null),
     };
 
     // Collect multi-select Preferred Time → comma string
