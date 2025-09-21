@@ -157,7 +157,7 @@ document.addEventListener('click', (e) => {
       city:            form.city?.value || null,
       timezone:        form.timezone?.value || null,
       goal: [
-        form.goal?.value ? `Goal: ${form.goal.value}` : null,
+        form.goal?.value ? `${form.goal.value}` : null,
       ].filter(Boolean).join(' | ')
     };
 
