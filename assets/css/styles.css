@@ -195,7 +195,7 @@ input[type="date"]::-webkit-clear-button {
     flex: 1 1 48%;       /* let them shrink to about half each */
   }
   .grid-2 input[type="date"] {
-    width: 95%;          /* shrink date field width */
+    width: 85%;          /* shrink date field width */
   }
   #country {
     width: 100%;         /* fill its half */
