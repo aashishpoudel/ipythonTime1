@@ -156,8 +156,8 @@ document.addEventListener('click', (e) => {
       state_label:  stateSel?.selectedOptions?.[0]?.textContent || null,
       city:            form.city?.value || null,
       timezone:        form.timezone?.value || null,
-      message: [
-        form.learning_goal?.value ? `Goal: ${form.learning_goal.value}` : null,
+      goal: [
+        form.goal?.value ? `Goal: ${form.goal.value}` : null,
       ].filter(Boolean).join(' | ')
     };
 
