@@ -73,8 +73,45 @@ document.addEventListener('click', (e) => {
 
 (function () {
   const form = document.getElementById('signupForm');
-  const msg  = document.getElementById('formMsg');
   if (!form) return;
+  const msg  = document.getElementById('formMsg');
+  // --- Parent Name enable/disable based on "Who is learning?" ---
+    const whoSel = document.getElementById('whoislearning') || form.querySelector('select[name="whoislearning"]');
+    const parentInput = form.querySelector('input[name="parent_name"]');
+
+    function syncParentName() {
+      if (!whoSel || !parentInput) return;
+      // If some scripts clear the value, force default to 'child'
+      if (!whoSel.value) whoSel.value = 'child';
+
+      if (whoSel.value === 'child') {
+        parentInput.disabled = false;
+        parentInput.placeholder = 'Parent name';
+      } else {
+        parentInput.value = '';
+        parentInput.disabled = true;
+        parentInput.placeholder = '— Not applicable —';
+      }
+    }
+
+    // Run once as soon as we can
+    syncParentName();
+
+    // Re-run on changes
+    whoSel?.addEventListener('change', syncParentName);
+
+    // Also re-run when DOM is ready (catches late mutations)
+    document.addEventListener('DOMContentLoaded', syncParentName);
+
+    // If some script replaces the <select>, re-wire the handler
+    new MutationObserver(() => {
+      const latest = document.getElementById('whoislearning') || form.querySelector('select[name="whoislearning"]');
+      if (latest && latest !== whoSel) {
+        latest.addEventListener('change', syncParentName);
+        syncParentName();
+      }
+    }).observe(form, { childList: true, subtree: true });
+
 
   // Auto-detect IANA timezone
   document.addEventListener('DOMContentLoaded', () => {
@@ -106,7 +143,9 @@ document.addEventListener('click', (e) => {
       who_is_learning: form.whoislearning?.value || null,
       student_name:    form.name?.value || null,
       student_dob:     form.dob?.value || null,
-      parent_name:     null,
+      parent_name: (whoSel?.value === 'child' && parentInput?.value.trim())
+      ? parentInput.value.trim()
+      : null,
       email:           form.email?.value || null,
       phone:           form.phone?.value || null,
       phone_country_iso: document.getElementById('phone_country_iso')?.value || null,
