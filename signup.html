@@ -44,10 +44,12 @@
           <input type="text" name="name" required placeholder="Student name" />
         </label>
         <div class="grid-2">
-          <label>Date of Birth
+          <label>
+            <span>Date of Birth <span class="required">*</span></span>
             <input name="dob" type="date" required />
           </label>
-          <label>Country
+          <label>
+            <span>Country <span class="required">*</span></span>
             <select id="country" name="country" required></select>
           </label>
         </div>
@@ -58,8 +60,9 @@
               <option value="">Select…</option>
             </select>
           </label>
-          <label>City
-            <input type="text" name="city" id="city" placeholder="Your city" />
+          <label>
+            <span>City <span class="required">*</span></span>
+            <input type="text" name="city" id="city" required placeholder="Your city" />
           </label>
         </div>
       </fieldset>
@@ -67,11 +70,13 @@
       <fieldset class="fieldset">
         <legend>Contact</legend>
         <div class="grid-2">
-          <label>Email
+          <label>
+            <span>Email <span class="required">*</span></span>
             <input name="email" type="email" required placeholder="parent@example.com" />
           </label>
-          <label>Phone (WhatsApp enabled)
-            <input id="phone" name="phone" type="tel" placeholder="(555) 555-5555" />
+          <label>
+            <span>Phone (WhatsApp enabled) <span class="required">*</span></span>
+            <input id="phone" name="phone" type="tel" required placeholder="(555) 555-5555" />
           </label>
           <input type="hidden" name="phone_country_iso" id="phone_country_iso" />
           <input type="hidden" name="phone_dial_code" id="phone_dial_code" />
