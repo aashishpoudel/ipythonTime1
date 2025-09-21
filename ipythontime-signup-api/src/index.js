@@ -47,13 +47,18 @@ export default {
       if (!body?.email) return json({ ok:false, error:"Missing email" }, 400, cors);
 
       const stmt = `
-		INSERT INTO signups
-		   (who_is_learning, student_name, student_dob, parent_name, email, phone,
-		    phone_country_iso, phone_dial_code, country_iso, country_label, city, timezone, message)
-		VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13)
-	 `;
+		  INSERT INTO signups
+			 (who_is_learning, student_name, student_dob, parent_name, email, phone,
+			  phone_country_iso, phone_dial_code, country_iso, country_label,
+			  state,                                   -- ✅ add
+			  city, timezone, message)
+		  VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,
+				  ?11,                                  -- ✅ add
+				  ?12,?13,?14)
+		`;
+
 	  const vals = [
-    	body.who_is_learning ?? null,
+		body.who_is_learning ?? null,
 		body.student_name ?? null,
 		body.student_dob ?? null,
 		body.parent_name ?? null,
@@ -63,10 +68,11 @@ export default {
 		body.phone_dial_code ?? null,
 		body.country_iso ?? null,
 		body.country_label ?? null,
+		(body.state ?? body.state_label ?? null),
 		body.city ?? null,
-		body.timezone ?? null,       // <-- new
+		body.timezone ?? null,
 		body.message ?? null,
-	 ];
+	  ];
 
       try {
         // 1) Save signup in D1
@@ -123,6 +129,7 @@ export default {
 				  <tr><td><b>Phone (number)</b></td><td>${escapeHtml(body.phone || "")}</td></tr>
 				  <tr><td><b>Phone country ISO</b></td><td>${escapeHtml(body.phone_country_iso || "")}</td></tr>
 				  <tr><td><b>Country</b></td><td>${escapeHtml(body.country_label || body.country_iso || "")}</td></tr>
+				  <tr><td><b>State/Province</b></td><td>${escapeHtml(body.state || body.state_label || "")}</td></tr>
 				  <tr><td><b>City</b></td><td>${escapeHtml(body.city || "")}</td></tr>
 				  <tr><td><b>Timezone</b></td><td>${escapeHtml(body.timezone || "")}</td></tr>
 				  <tr><td><b>Message</b></td><td>${escapeHtml(body.message || "")}</td></tr>
@@ -168,7 +175,7 @@ export default {
         return new Response("Unauthorized", { status: 401, headers: cors });
 
       const { results } = await env.DB.prepare(`
-        SELECT id, created_at, student_name, email, phone_dial_code, phone, country_iso
+        SELECT id, created_at, student_name, email, phone_dial_code, phone, country_iso, state
         FROM signups ORDER BY id DESC LIMIT 50
       `).all();
       return json({ ok:true, results }, 200, cors);

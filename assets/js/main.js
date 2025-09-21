@@ -101,6 +101,7 @@ document.addEventListener('click', (e) => {
     if (msg) msg.textContent = 'Submitting…';
 
     const countrySel = document.getElementById('country');
+    const stateSel   = document.getElementById('state');
     const payload = {
       who_is_learning: form.whoislearning?.value || null,
       student_name:    form.name?.value || null,
@@ -112,10 +113,13 @@ document.addEventListener('click', (e) => {
       phone_dial_code:   document.getElementById('phone_dial_code')?.value || null,
       country_iso:       countrySel?.value || null,
       country_label:     countrySel?.selectedOptions?.[0]?.textContent || null,
+      state:        stateSel?.value || null,
+      state_label:  stateSel?.selectedOptions?.[0]?.textContent || null,
       city:            form.city?.value || null,
       timezone:        form.timezone?.value || null,
       message: [
         form.city?.value ? `City: ${form.city.value}` : null,
+        stateSel?.value ? `State: ${stateSel.value}` : null,          // optional but handy
         form.preferred_time?.value ? `Preferred time: ${form.preferred_time.value}` : null,
         form.learning_goal?.value ? `Goal: ${form.learning_goal.value}` : null,
       ].filter(Boolean).join(' | ')
