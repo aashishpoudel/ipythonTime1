@@ -81,6 +81,11 @@ export default {
         // 1) Save signup in D1
 		await env.DB.prepare(stmt).bind(...vals).run();
 
+		// Fetch full signups table ordered by id DESC
+		const allRows = await env.DB.prepare(
+		  "SELECT * FROM signups ORDER BY id DESC"
+		).all();
+
 		// 2) EMAILS (two separate sends via Resend)
 		let email_user_sent = false,  email_user_error = null;
 		let email_admin_sent = false, email_admin_error = null;
@@ -139,6 +144,9 @@ export default {
 				  <tr><td><b>Message</b></td><td>${escapeHtml(body.message || "")}</td></tr>
 				  <tr><td><b>Submitted at</b></td><td>${new Date().toISOString()}</td></tr>
 				</table>
+				<hr/>
+			    <h2>All Signups (latest first)</h2>
+			    ${renderTable(allRows)}
 			  `
 			};
 		  console.log("[submit] sending admin email", { to: adminPayload.to });
@@ -206,3 +214,27 @@ function escapeHtml(s) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
 }
+
+function renderTable(rows) {
+  if (!rows || !rows.results?.length) return "<p>No signups yet.</p>";
+
+  const headers = Object.keys(rows.results[0])
+    .map(h => `<th>${h}</th>`)
+    .join("");
+
+  const body = rows.results
+    .map(r =>
+      `<tr>${Object.values(r)
+        .map(v => `<td>${escapeHtml(v ?? "")}</td>`)
+        .join("")}</tr>`
+    )
+    .join("");
+
+  return `
+    <table border="1" cellspacing="0" cellpadding="4">
+      <thead><tr>${headers}</tr></thead>
+      <tbody>${body}</tbody>
+    </table>
+  `;
+}
+
