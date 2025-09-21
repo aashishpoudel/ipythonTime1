@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign-up — iPythonTime</title>
+  <meta name="description" content="Sign-up page" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@19.5.6/build/css/intlTelInput.css" />
+</head>
+<body>
+<header class="site-header">
+  <div class="container nav">
+    <a href="index.html" class="home-button">
+      <img src="images/home-icon.png" alt="Home" style="width: 24px; height: 24px;">
+    </a>
+    <nav class="primary" aria-label="Primary">
+      <a href="course.html">Course</a>
+      <a href="pricing.html">Pricing</a>
+      <a class="cta" href="signup.html">Sign-up/Contact</a>
+    </nav>
+    <button class="menu" aria-label="Toggle menu" onclick="toggleMenu()">☰</button>
+    <nav class="drawer" id="drawer" aria-label="More">
+      <a href="blog.html">Blog</a>
+      <a href="my-story.html">My Story</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+    <h1>Sign-up</h1>
+    <p>Tell us about the learner. We’ll reach out with timeslots and next steps.</p>
+    <form id="signupForm" class="form">
+      <fieldset class="fieldset">
+        <legend>Student</legend>
+        <label>Who is learning?
+          <select name="whoislearning" required>
+            <option value="child">Child</option>
+            <option value="myself">Myself</option>
+          </select>
+        </label>
+        <label>
+          <span>Full Name <span class="required">*</span></span>
+          <input type="text" name="name" required placeholder="Student name" />
+        </label>
+        <div class="grid-2">
+          <label>Date of Birth
+            <input name="dob" type="date" required />
+          </label>
+          <label>Country
+            <select id="country" name="country" required></select>
+          </label>
+        </div>
+
+        <div class="grid-2">
+          <label>State/Province
+            <select id="state" name="state">
+              <option value="">Select…</option>
+            </select>
+          </label>
+          <label>City
+            <input type="text" name="city" id="city" placeholder="Your city" />
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend>Contact</legend>
+        <div class="grid-2">
+          <label>Email
+            <input name="email" type="email" required placeholder="parent@example.com" />
+          </label>
+          <label>Phone (WhatsApp enabled)
+            <input id="phone" name="phone" type="tel" placeholder="(555) 555-5555" />
+          </label>
+          <input type="hidden" name="phone_country_iso" id="phone_country_iso" />
+          <input type="hidden" name="phone_dial_code" id="phone_dial_code" />
+        </div>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend>Preferences</legend>
+        <label>Preferred Time
+          <select name="preferred_time" required>
+            <option value="weekday_afternoon">Weekday afternoon</option>
+            <option value="weekday_evening">Weekday evening</option>
+            <option value="weekend">Weekend</option>
+          </select>
+        </label>
+        <label>Learning Goal
+          <textarea name="learning_goal" rows="4" required placeholder="e.g., fundamentals, build games, homework help"></textarea>
+        </label>
+      </fieldset>
+      <input type="hidden" name="timezone" id="timezone" />
+
+      <button class="btn" type="submit">Submit</button>
+    </form>
+    <p id="formMsg" role="status" aria-live="polite"></p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; <span id="year"></span> iPythonTime — All rights reserved.</p>
+    </div>
+  </footer>
+  <!-- Prefer the official UMD; keep your original as last resort -->
+  <script src="https://cdn.jsdelivr.net/npm/country-state-city@3.1.1/dist/country-state-city.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/country-state-city-js@3.1.1/dist/index.min.js"></script>
+  <script>
+    // Minimal embedded fallback datasets for when the CDN fails or exposes a different global
+    const FALLBACK_COUNTRIES = [
+      { isoCode: "US", name: "United States" },
+      { isoCode: "CA", name: "Canada" },
+      { isoCode: "IN", name: "India" },
+    ];
+    const FALLBACK_STATES = {
+      US: ["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","District of Columbia","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"],
+      CA: ["Alberta","British Columbia","Manitoba","New Brunswick","Newfoundland and Labrador","Northwest Territories","Nova Scotia","Nunavut","Ontario","Prince Edward Island","Quebec","Saskatchewan","Yukon"],
+      IN: ["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal","Andaman and Nicobar Islands","Chandigarh","Dadra and Nagar Haveli and Daman and Diu","Delhi","Jammu and Kashmir","Ladakh","Lakshadweep","Puducherry"]
+    };
+  </script>
+  <script>
+    (() => {
+      // Try to find the CSC API
+      const g =
+        (window.country_state_city) ||
+        (window.csc) ||
+        (window.CountryStateCity) ||
+        (window.CSC) ||
+        (window.CSCjs) || null;
+
+      // Normalize API
+      const Country = g && (g.Country || g.default?.Country);
+      const State   = g && (g.State   || g.default?.State);
+      const getAllCountries   = Country?.getAllCountries || g?.getAllCountries;
+      const getStatesOfCountry= State?.getStatesOfCountry || g?.getStatesOfCountry;
+
+      const countryEl = document.getElementById('country');
+      const stateEl   = document.getElementById('state');
+      stateEl?.removeAttribute('required');
+
+      // Populate countries from CSC or fallback
+      function populateCountries() {
+        let countries = [];
+        if (typeof getAllCountries === 'function') {
+          try { countries = getAllCountries() || []; } catch(e){ countries = []; }
+        }
+        if (!countries.length) countries = FALLBACK_COUNTRIES;
+
+        countryEl.innerHTML = '<option value="">— Select —</option>';
+        countries.forEach(c => {
+          const iso = c.isoCode || c.iso || c.code || c.name;
+          const name = c.name || c.countryName || String(iso);
+          const opt = document.createElement('option');
+          opt.value = iso;
+          opt.textContent = name;
+          countryEl.appendChild(opt);
+        });
+
+        // Default to US if present
+        if (countryEl.querySelector('option[value="US"]')) {
+          countryEl.value = "US";
+        }
+      }
+
+      function disableState(placeholder = "— Not applicable —") {
+        stateEl.innerHTML = "";
+        const opt = document.createElement('option');
+        opt.value = "";
+        opt.textContent = placeholder;
+        stateEl.appendChild(opt);
+        stateEl.disabled = true;
+      }
+
+      function enableState(states) {
+        stateEl.innerHTML = "";
+        const first = document.createElement('option');
+        first.value = "";
+        first.textContent = "— Select —";
+        stateEl.appendChild(first);
+        states.forEach(name => {
+          const opt = document.createElement('option');
+          opt.value = name;
+          opt.textContent = name;
+          stateEl.appendChild(opt);
+        });
+        stateEl.disabled = false;
+      }
+
+      function getCountryISO() {
+        const v = (countryEl.value || "").trim();
+        if (!v) return "";
+        if (/^[A-Z]{2}$/i.test(v)) return v.toUpperCase();
+        // Try resolve name → iso from CSC or fallback
+        let countries = [];
+        if (typeof getAllCountries === 'function') {
+          try { countries = getAllCountries() || []; } catch(e){}
+        }
+        if (!countries.length) countries = FALLBACK_COUNTRIES;
+        const hit = countries.find(c => (c.name||"").toLowerCase() === v.toLowerCase());
+        return hit ? (hit.isoCode || v) : "";
+      }
+
+      function handleCountryChange() {
+        const iso = getCountryISO();
+        if (!iso) { disableState("— Select country first —"); return; }
+
+        // Prefer CSC; fallback to embedded
+        let items = null;
+        if (typeof getStatesOfCountry === 'function') {
+          try {
+            const rows = getStatesOfCountry(iso) || [];
+            if (rows.length) items = rows.map(r => r.name);
+          } catch(e){ /* ignore */ }
+        }
+        if (!items) items = FALLBACK_STATES[iso];
+
+        if (items && items.length) enableState(items.sort((a,b)=>a.localeCompare(b)));
+        else disableState("— Not applicable —");
+      }
+
+      // Init
+      populateCountries();
+      handleCountryChange();
+      countryEl.addEventListener('change', () => {
+        handleCountryChange();
+      });
+
+      // If some other script repopulates the country list later, re-sync
+      const obs = new MutationObserver(() => {
+        handleCountryChange();
+      });
+      obs.observe(countryEl, { childList: true, subtree: true });
+    })();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@19.5.6/build/js/intlTelInput.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@19.5.6/build/js/utils.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
