@@ -46,16 +46,14 @@ export default {
 
       if (!body?.email) return json({ ok:false, error:"Missing email" }, 400, cors);
 
-      const stmt = `
-		  INSERT INTO signups
-			 (who_is_learning, student_name, student_dob, parent_name, email, phone,
-			  phone_country_iso, phone_dial_code, country_iso, country_label,
-			  state,                                   -- ✅ add
-			  city, timezone, message)
-		  VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,
-				  ?11,                                  -- ✅ add
-				  ?12,?13,?14)
-		`;
+      INSERT INTO signups
+		 (who_is_learning, student_name, student_dob, parent_name, email, phone,
+		  phone_country_iso, phone_dial_code, country_iso, country_label,
+		  state,
+		  city, timezone, preferred_time, message)
+		VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,
+				?11,
+				?12,?13,?14,?15)
 
 	  const vals = [
 		body.who_is_learning ?? null,
@@ -71,6 +69,7 @@ export default {
 		(body.state ?? body.state_label ?? null),
 		body.city ?? null,
 		body.timezone ?? null,
+		(body.preferred_time ?? null),
 		body.message ?? null,
 	  ];
 
@@ -132,6 +131,7 @@ export default {
 				  <tr><td><b>State/Province</b></td><td>${escapeHtml(body.state || body.state_label || "")}</td></tr>
 				  <tr><td><b>City</b></td><td>${escapeHtml(body.city || "")}</td></tr>
 				  <tr><td><b>Timezone</b></td><td>${escapeHtml(body.timezone || "")}</td></tr>
+				  <tr><td><b>Preferred Time</b></td><td>${escapeHtml(body.preferred_time || "")}</td></tr>
 				  <tr><td><b>Message</b></td><td>${escapeHtml(body.message || "")}</td></tr>
 				  <tr><td><b>Submitted at</b></td><td>${new Date().toISOString()}</td></tr>
 				</table>

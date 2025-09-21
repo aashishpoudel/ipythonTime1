@@ -120,10 +120,23 @@ document.addEventListener('click', (e) => {
       message: [
         form.city?.value ? `City: ${form.city.value}` : null,
         stateSel?.value ? `State: ${stateSel.value}` : null,          // optional but handy
-        form.preferred_time?.value ? `Preferred time: ${form.preferred_time.value}` : null,
         form.learning_goal?.value ? `Goal: ${form.learning_goal.value}` : null,
       ].filter(Boolean).join(' | ')
     };
+
+    // Collect multi-select Preferred Time → comma string
+    const ptEl   = document.getElementById('preferred_time');
+    const times  = Array.from(ptEl?.selectedOptions || []).map(o => o.value);
+    const ptJoin = times.join(',');
+
+    // add to payload
+    payload.preferred_time = ptJoin;
+
+    // also reflect in the human-readable message preview
+    if (times.length) {
+      payload.message = [payload.message, `Preferred time: ${times.join(', ')}`]
+        .filter(Boolean).join(' | ');
+    }
 
     try {
       const res  = await fetch(API_URL, {
