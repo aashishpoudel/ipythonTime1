@@ -83,6 +83,93 @@
       /* Optional: soften list markers area slightly */
       .nice-list li{ background:transparent; }
     </style>
+    <style>
+      /* --- Python by the Numbers (glass cards) --- */
+      .section.stats{
+        background: linear-gradient(120deg, rgba(255,255,255,.55), rgba(255,255,255,.35));
+        border-color: rgba(255,255,255,.7);
+        backdrop-filter: blur(6px);
+      }
+      .num-grid{
+        display:grid;
+        grid-template-columns: repeat(3, minmax(0,1fr));
+        gap: 1rem;
+        align-items: stretch;
+      }
+      .num-card{
+        background: rgba(255,255,255,.65);
+        border: 1px solid var(--border);
+        border-radius: .9rem;
+        padding: 1.1rem;
+        text-align: center;
+        box-shadow: 0 8px 24px rgba(0,0,0,.06);
+      }
+      .num-card .kpi{
+        font-size: clamp(2rem, 6vw, 3rem);
+        font-weight: 800;
+        line-height: 1;
+        margin: .1rem 0 .3rem;
+        color: rgba(37, 99, 235, 1);
+      }
+      .num-card .label{
+        margin: 0;
+        color: var(--muted);
+      }
+      .section.stats h2 { text-align: center; }
+      @media (max-width: 900px){
+        .num-grid{ grid-template-columns: 1fr; }
+      }
+    </style>
+    <style>
+      /* Center and make it a touch smaller */
+      .why-title{
+        text-align: center;
+        font-size: clamp(1.5rem, 3vw, 2.1rem);
+        border-top: 3px solid rgba(37, 99, 235, 1);
+        border-bottom: 3px solid rgba(37, 99, 235, 1);
+        padding: .75rem 0;   /* space between the lines */
+        margin: 1.25rem 0;   /* space around the banner */
+      }
+    </style>
+    <style>
+      /* Sticky band that holds both the numbers and the banner title */
+      .sticky-band{
+        position: sticky;
+        top: calc(var(--header-h, 56px) + 0.5rem); /* sits just under your sticky header */
+        z-index: 30;                                /* header is z-index:40 */
+        background: var(--bg);
+      }
+
+      /* Tighten spacing inside the sticky band so it feels compact while fixed */
+      .sticky-band .section.stats{ margin-bottom: .5rem; }
+      .sticky-band .why-title{ margin: 0 0 .5rem; }
+
+      /* When jumping with TOC links, ensure sections aren't hidden under the sticky band */
+      .section{
+        scroll-margin-top: calc(var(--header-h, 56px) + var(--sticky-h, 0px) + 24px);
+      }
+
+      /* Make the left TOC stick *below* the sticky band */
+      .toc{
+        top: calc(var(--header-h, 56px) + var(--sticky-h, 0px) + 1rem) !important;
+      }
+      @media (min-width: 981px){
+        .page-grid > .toc{
+          position: fixed !important;
+          top: calc(var(--header-h, 56px) + var(--sticky-h, 0px) + 1rem) !important;
+          left: var(--toc-left, 0px);
+          width: 260px;
+          max-height: none;
+          overflow: visible; /* no inner scrollbars */
+          z-index: 25;       /* under header + drawer */
+        }
+      }
+      @media (min-width: 981px){
+        .page-grid > .content{
+          grid-column: 2 / 3;       /* ← reserve the right column for content */
+        }
+      }
+    </style>
 </head>
 <body>
 
@@ -105,21 +192,39 @@
 </header>
 
   <main class="container">
-        <section class="hero">
-          <h1>Why Python is so Popular?</h1>
-        </section>
-        <nav class="toc-chips" aria-label="On this page"><a href="#1">Simplicity & Readability</a><a href="#2">Versatility Across Domains</a><a href="#3">Massive Ecosystem & Libraries</a><a href="#4">Large, Supportive Community</a><a href="#5">Cross-Platform & Open Source</a><a href="#6">Trusted by Industry Leaders</a></nav>
-        <div class="page-grid">
-          <aside class="toc" aria-label="On this page">
-            <h3>On this page</h3>
-            <ol>
-              <li><a href="#1">Simplicity & Readability</a></li><li><a href="#2">Versatility Across Domains</a></li><li><a href="#3">Massive Ecosystem & Libraries</a></li><li><a href="#4">Large, Supportive Community</a></li><li><a href="#5">Cross-Platform & Open Source</a></li><li><a href="#6">Trusted by Industry Leaders</a></li>
-            </ol>
-          </aside>
-          <div class="content">
-            
-    
-    
+    <!-- Python by the Numbers -->
+    <div class="sticky-band" id="sticky-band">
+      <!-- Python by the Numbers -->
+      <section class="section stats" id="numbers">
+        <h2>Python by the Numbers</h2>
+        <div class="num-grid">
+          <div class="num-card">
+            <div class="kpi">2M+</div>
+            <p class="label">Python packages available on PyPI</p>
+          </div>
+          <div class="num-card">
+            <div class="kpi">80%</div>
+            <p class="label">Of developers use Python as their main language <span class="muted">(Stack Overflow 2023)</span></p>
+          </div>
+          <div class="num-card">
+            <div class="kpi">10M+</div>
+            <p class="label">Active Python developers worldwide</p>
+          </div>
+        </div>
+      </section>
+      <h2 class="text-2xl md:text-3xl font-semibold text-gray-800 mb-8 text-center why-title">
+        Why Python is so popular?
+      </h2>
+    </div>
+    <nav class="toc-chips" aria-label="On this page"><a href="#1">Simplicity & Readability</a><a href="#2">Versatility Across Domains</a><a href="#3">Massive Ecosystem & Libraries</a><a href="#4">Large, Supportive Community</a><a href="#5">Cross-Platform & Open Source</a><a href="#6">Trusted by Industry Leaders</a></nav>
+    <div class="page-grid">
+      <aside class="toc" aria-label="On this page">
+        <h3>On this page</h3>
+        <ol>
+          <li><a href="#1">Simplicity & Readability</a></li><li><a href="#2">Versatility Across Domains</a></li><li><a href="#3">Massive Ecosystem & Libraries</a></li><li><a href="#4">Large, Supportive Community</a></li><li><a href="#5">Cross-Platform & Open Source</a></li><li><a href="#6">Trusted by Industry Leaders</a></li>
+        </ol>
+      </aside>
+      <div class="content">
 
     <!-- 1) FOUNDATIONS -->
     <section class="section" id="1">

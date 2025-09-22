@@ -208,3 +208,23 @@ input[type="date"]::-webkit-clear-button {
     text-align: right;   /* keep option text right aligned */
   }
 }
+
+/* --- KPI numbers: blue --- */
+.num-card .kpi{
+  color: rgba(37, 99, 235, 1);
+}
+
+/* --- Center "Python by the Numbers" heading --- */
+.section.stats h2{
+  text-align: center;
+}
+
+/* --- Center & slightly shrink "Why Python is so Popular?" --- */
+.hero h1{
+  text-align: center;
+  /* a touch smaller than typical hero size */
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+}
+
+.kpi { color: rgba(37, 99, 235, 1); }
+
