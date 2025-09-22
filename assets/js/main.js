@@ -301,3 +301,38 @@ document.addEventListener('click', (e) => {
   });
 })();
 
+// --- measure header + sticky band heights for correct offsets ---
+(function(){
+  const root   = document.documentElement;
+  const header = document.querySelector('.site-header');
+  const band   = document.getElementById('sticky-band');
+
+  if (!header || !band) return;
+
+  function setVars(){
+    root.style.setProperty('--header-h', header.offsetHeight + 'px');
+    root.style.setProperty('--sticky-h', band.offsetHeight   + 'px');
+  }
+
+  // set now and on resize (and after fonts/layout settle)
+  setVars();
+  window.addEventListener('resize', setVars);
+  window.addEventListener('load', setVars);
+})();
+
+(function(){
+  const root = document.documentElement;
+  const grid = document.querySelector('.page-grid');
+  const toc  = document.querySelector('.page-grid > .toc');
+  if (!grid || !toc) return;
+
+  function setTocLeft(){
+    const rect = grid.getBoundingClientRect();
+    root.style.setProperty('--toc-left', rect.left + 'px');
+  }
+
+  setTocLeft();
+  window.addEventListener('resize', setTocLeft);
+  window.addEventListener('load', setTocLeft);
+})();
+
