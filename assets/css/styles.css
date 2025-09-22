@@ -228,3 +228,36 @@ input[type="date"]::-webkit-clear-button {
 
 .kpi { color: rgba(37, 99, 235, 1); }
 
+/* Pricing feature list: stylized bullets */
+.plan ul{
+  list-style: none;            /* remove default bullets */
+  margin: 0;
+  padding: 0;
+}
+.plan ul li{
+  position: relative;
+  margin: .35rem 0;
+  padding-left: 1.75rem;       /* room for the badge */
+}
+.plan ul li::before{
+  content: "➜";                /* or "➜" / "→" if you prefer arrows */
+  position: absolute;
+  left: 0;
+  top: .15rem;                 /* vertical alignment with first line */
+  width: 1.1rem;
+  height: 1.1rem;
+  line-height: 1.1rem;
+  text-align: center;
+  font-weight: 800;
+  font-size: .8rem;
+  color: #fff;
+  background: var(--brand);    /* uses your brand blue */
+  border-radius: 999px;        /* perfect circle */
+  box-shadow: 0 1px 0 rgba(0,0,0,.06);
+}
+
+/* Optional: make bullets for the featured plan a bit brighter */
+.plan.featured ul li::before{
+  background: #3b82f6; /* tailwind blue-500; tweak if desired */
+}
+

@@ -198,6 +198,54 @@
       /* Keep the sticky band extra snug */
       .sticky-band .section.stats { margin-bottom: .25rem; }
       .sticky-band .why-title      { margin: 0; }
+
+      .arrow-list{
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .arrow-list li{
+        position: relative;
+        margin: .25rem 0;
+        padding-left: 1.75rem;             /* space for the arrow badge */
+      }
+      .arrow-list li::before{
+        content: "→";
+        position: absolute;
+        left: 0; top: .15rem;
+        width: 1.2rem; height: 1.2rem;
+        line-height: 1.2rem;
+        text-align: center;
+        font-weight: 800;
+        font-size: .9rem;
+        color: rgba(37, 99, 235, 1);       /* the same blue you’re using */
+        border: 1px solid rgba(37,99,235,.25);
+        background: rgba(37,99,235,.08);
+        border-radius: .6rem;              /* pill/circle look */
+      }
+      .arrow-list .sublist{
+        list-style: none;
+        margin: .25rem 0 0 .5rem;   /* small indent below the parent line */
+        padding-left: 1rem;         /* indent the sub-items */
+      }
+      .arrow-list .sublist li{
+        position: relative;
+        margin: .15rem 0;
+        padding-left: 1rem;         /* room for the chevron */
+      }
+      .arrow-list .sublist li::before{
+        content: "›";               /* smaller chevron for sub-items */
+        position: absolute;
+        left: 0; top: .15rem;
+        width: 1rem; height: 1rem;
+        line-height: 1rem;
+        text-align: center;
+        font-weight: 800;
+        font-size: .9rem;
+        color: rgba(37, 99, 235, 1); /* same blue as your KPIs */
+        border: none;
+        background: transparent;
+      }
     </style>
 </head>
 <body>
@@ -245,75 +293,90 @@
         Why Python is so popular?
       </h2>
     </div>
-    <nav class="toc-chips" aria-label="On this page"><a href="#1">Simplicity & Readability</a><a href="#2">Versatility Across Domains</a><a href="#3">Massive Ecosystem & Libraries</a><a href="#4">Large, Supportive Community</a><a href="#5">Cross-Platform & Open Source</a><a href="#6">Trusted by Industry Leaders</a></nav>
+    <nav class="toc-chips" aria-label="On this page"><a href="#1">Simple & Readable</a><a href="#2">Widespread Use in Academia</a><a href="#3">Versatile Across Domains</a><a href="#4">Massive Ecosystem & Libraries</a><a href="#5">Large, Supportive Community</a><a href="#6">Cross-Platform & Open Source</a><a href="#7">Trusted by Industry Leaders</a></nav>
     <div class="page-grid">
       <aside class="toc" aria-label="On this page">
         <h3>On this page</h3>
         <ol>
-          <li><a href="#1">Simplicity & Readability</a></li><li><a href="#2">Versatility Across Domains</a></li><li><a href="#3">Massive Ecosystem & Libraries</a></li><li><a href="#4">Large, Supportive Community</a></li><li><a href="#5">Cross-Platform & Open Source</a></li><li><a href="#6">Trusted by Industry Leaders</a></li>
+          <li><a href="#1">Simple & Readable</a></li><li><a href="#2">Widespread Use in Academia</a></li><li><a href="#3">Versatile Across Domains</a></li><li><a href="#4">Massive Ecosystem & Libraries</a></li><li><a href="#5">Large, Supportive Community</a></li><li><a href="#6">Cross-Platform & Open Source</a></li><li><a href="#7">Trusted by Industry Leaders</a></li>
         </ol>
       </aside>
       <div class="content">
 
     <!-- 1) FOUNDATIONS -->
     <section class="section" id="1">
-      <h2>Simplicity & Readability</h2>
-      <ol class="nice-list">
-        <li>Readable, English-like syntax makes Python approachable</li>
+      <h2>Simple & Readable</h2>
+      <ul class="arrow-list">
+        <li>Readable, English-like syntax with real-world relevance</li>
         <li>Developers onboard quickly and maintain code with less friction</li>
         <li>Simplifies rapid prototyping with minimal code</li>
-      </ol>
+      </ul>
     </section>
 
-    <!-- 2) OOP -->
     <section class="section" id="2">
-      <h2>Versatility Across Domains</h2>
-      <ol class="nice-list">
-        <li>General-purpose language used for many types of projects</li>
-        <li>Powers web backends, AI/ML pipelines, data analysis, scientific computing, and automation</li>
-        <li>Applicable across finance, DevOps, IoT, and more</li>
-      </ol>
+      <h2>Widespread Use in Academia</h2>
+      <ul class="arrow-list">
+        <li>Most widely taught first School Programming Language (all levels)</li>
+        <li>Python teaches kids how to think logically and break problems into steps</li>
+        <li>Python connects with
+          <ul class="sublist">
+            <li><strong>Math</strong> [graphs/fractions]</li>
+            <li><strong>Science</strong> [experiments/data]</li>
+            <li><strong>Art</strong> [games/music/design]</li>
+          </ul>
+        </li>
+      </ul>
     </section>
 
     <!-- 2) OOP -->
     <section class="section" id="3">
-      <h2>Massive Ecosystem & Libraries</h2>
-      <ol class="nice-list">
-        <li>Hundreds of thousands of packages on PyPI</li>
-        <li>Libraries cover NLP, visualization, web scraping, and more</li>
-        <li>Well-maintained packages accelerate development and promote best practices</li>
-      </ol>
+      <h2>Versatile Across Domains</h2>
+      <ul class="arrow-list">
+        <li>General-purpose language used for many types of projects</li>
+        <li>Powers web backends, AI/ML pipelines, data analysis, scientific computing, and automation</li>
+        <li>Applicable across finance, DevOps, IoT, and more</li>
+      </ul>
     </section>
 
     <!-- 2) OOP -->
     <section class="section" id="4">
-      <h2>Large, Supportive Community</h2>
-      <ol class="nice-list">
-        <li>Massive global community contributing to growth</li>
-        <li>Shared knowledge base shortens debugging and learning curves</li>
-        <li>Thriving open-source projects for collaboration</li>
-      </ol>
+      <h2>Massive Ecosystem & Libraries</h2>
+      <ul class="arrow-list">
+        <li>Hundreds of thousands of packages on PyPI</li>
+        <li>Libraries cover NLP, visualization, web scraping, and more</li>
+        <li>Well-maintained packages accelerate development and promote best practices</li>
+      </ul>
     </section>
-
 
     <!-- 2) OOP -->
     <section class="section" id="5">
-      <h2>Cross-Platform & Open Source</h2>
-      <ol class="nice-list">
-        <li>Runs seamlessly on Windows, macOS, and Linux</li>
-        <li>Completely free and open source, avoiding licensing costs</li>
-        <li>One codebase can be deployed across laptops, servers, and cloud containers</li>
-      </ol>
+      <h2>Large, Supportive Community</h2>
+      <ul class="arrow-list">
+        <li>Massive global community contributing to growth</li>
+        <li>Shared knowledge base shortens debugging and learning curves</li>
+        <li>Thriving open-source projects for collaboration</li>
+      </ul>
     </section>
+
 
     <!-- 2) OOP -->
     <section class="section" id="6">
+      <h2>Cross-Platform & Open Source</h2>
+      <ul class="arrow-list">
+        <li>Runs seamlessly on Windows, macOS, and Linux</li>
+        <li>Completely free and open source, avoiding licensing costs</li>
+        <li>One codebase can be deployed across laptops, servers, and cloud containers</li>
+      </ul>
+    </section>
+
+    <!-- 2) OOP -->
+    <section class="section" id="7">
       <h2>Trusted by Industry Leaders</h2>
-      <ol class="nice-list">
+      <ul class="arrow-list">
         <li>Adopted by organizations like Google, Microsoft, Netflix, Spotify, and NASA</li>
         <li>Enterprise adoption creates strong job demand</li>
         <li>Ensures ecosystem continues evolving with real-world needs</li>
-      </ol>
+      </ul>
     </section>
 
     <a class="btn" href="signup.html">Start Learning</a>
