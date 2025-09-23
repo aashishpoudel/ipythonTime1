@@ -336,3 +336,17 @@ document.addEventListener('click', (e) => {
   window.addEventListener('load', setTocLeft);
 })();
 
+(function () {
+  const sel = document.getElementById('preferred_time');
+  const out = document.getElementById('preferred_time_readout');
+  if (!sel || !out) return;
+
+  function updatePreferredTimeReadout() {
+    const labels = Array.from(sel.selectedOptions).map(o => o.textContent.trim());
+    out.textContent = labels.length ? labels.join(', ') : '— Choose preferred times —';
+  }
+
+  sel.addEventListener('change', updatePreferredTimeReadout);
+  // Initialize on first paint (in case prefilled)
+  updatePreferredTimeReadout();
+})();
