@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Setup/Requirements — iPythonTime</title>
+  <meta name="description" content="Setup and requirements for iPythonTime" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+    <a href="index.html" class="home-button">
+      <img src="images/home-icon.png" alt="Home" style="width: 24px; height: 24px;">
+    </a>
+    <nav class="primary" aria-label="Primary">
+      <a href="course.html">Course</a>
+      <a href="pricing.html">Pricing</a>
+      <a class="cta" href="signup.html">Sign-up/Contact</a>
+    </nav>
+    <button class="menu" aria-label="Toggle menu" onclick="toggleMenu()">☰</button>
+    <nav class="drawer" id="drawer" aria-label="More">
+      <a href="why-python.html">Why Python</a>
+      <a href="my-story.html">My Story</a>
+      <a href="setup_requirement.html">Setup/Requirements</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <!-- Python by the Numbers -->
+  <div class="sticky-band" id="sticky-band">
+    <!-- Python by the Numbers -->
+    <section class="section stats" id="numbers">
+      <h1>Setup/Requirements</h1>
+    </section>
+  </div>
+  <nav class="toc-chips" aria-label="On this page"><a href="#requirements">Requirements</a><a href="#setup">Setup</a><a href="#payment">Payment</a></nav>
+  <div class="page-grid">
+    <aside class="toc" aria-label="On this page">
+      <h3>On this page</h3>
+      <ol>
+        <li><a href="#requirements">Requirements</a></li><li><a href="#setup">Setup</a></li><li><a href="#payment">Payment</a></li>
+      </ol>
+    </aside>
+    <div class="content">
+
+      <!-- 1) FOUNDATIONS -->
+      <section class="section" id="requirements">
+        <h2>Requirements</h2>
+        <ul class="arrow-list">
+          <li>Windows/Mac computer (RAM>=16MB)</li>
+          <li>Dropbox Account</li>
+          <li>Phone (WhatsApp Enabled)</li>
+        </ul>
+      </section>
+
+      <section class="section" id="setup">
+        <h2>Setup</h2>
+        <ul class="arrow-list">
+          <li>Pycharm Community Version</li>
+          <li>Dropbox</li>
+        </ul>
+      </section>
+
+      <section class="section" id="payment">
+        <h2>Payment</h2>
+        <ul class="arrow-list">
+          <li>Bank Details below</li>
+        </ul>
+      </section>
+      <a class="btn" href="signup.html">Start Learning</a>
+
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>&copy; <span id="year"></span> iPythonTime — All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script>
+// Define toggleMenu if not already present (defensive)
+if (typeof window.toggleMenu !== 'function') {
+  window.toggleMenu = function(){
+    var headerNav = document.querySelector('header nav');
+    var drawer = document.getElementById('drawer');
+    if (headerNav) headerNav.classList.toggle('open');
+    if (drawer) drawer.classList.toggle('open');
+  };
+}
+</script>
+
+</body>
+</html>

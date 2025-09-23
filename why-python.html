@@ -6,247 +6,6 @@
   <title>Course — iPythonTime</title>
   <meta name="description" content="Course page" />
   <link rel="stylesheet" href="assets/css/styles.css" />
-
-    <style>
-    /* Course page redesign styles */
-    .hero{
-      background: linear-gradient(120deg, rgba(255,255,255,.8), rgba(255,255,255,.6));
-      border:1px solid var(--border);
-      border-radius:1rem;
-      padding:1.25rem 1.25rem 1rem;
-      margin: .5rem 0 1rem;
-      box-shadow: 0 6px 16px rgba(0,0,0,.06);
-    }
-    .hero h1{ margin:0 0 .25rem 0 }
-    .hero p{ margin:.25rem 0 .75rem 0; color:var(--muted) }
-    .page-grid{
-      display:grid;
-      grid-template-columns: 260px 1fr;
-      gap:1rem;
-      align-items:start;
-    }
-    .toc{
-      position:sticky; top:6rem;
-      background: rgba(255,255,255,.75);
-      border:1px solid var(--border);
-      border-radius:.75rem;
-      padding:.75rem;
-    }
-    .toc h3{
-      margin:.25rem 0 .5rem 0;
-      font-size:1rem; color:var(--muted);
-      letter-spacing:.01em; text-transform:uppercase;
-    }
-    .toc ol{ list-style:none; padding-left:0; margin:0 }
-    .toc a{
-      display:block; padding:.4rem .5rem; border-radius:.5rem;
-      text-decoration:none; color:var(--text);
-    }
-    .toc a:hover{ background:#f8fafc; text-decoration:none }
-    .toc a.active{ background:#eff6ff; color:var(--brand); font-weight:600; }
-    /* Mobile chips */
-    .toc-chips{
-      display:none;
-      overflow:auto; white-space:nowrap;
-      margin:.25rem 0 .75rem; padding:.25rem .25rem 0;
-    }
-    .toc-chips a{
-      display:inline-block; margin:0 .25rem .5rem 0; padding:.4rem .6rem;
-      background:#fff; border:1px solid var(--border); border-radius:999px;
-      text-decoration:none; color:var(--text);
-    }
-    .toc-chips a.active{ border-color:var(--brand); }
-    /* Content sections */
-    .section{
-      background:#ffffff;
-      border:1px solid var(--border);
-      border-radius:.75rem;
-      padding:1rem;
-      margin-bottom:1rem;
-    }
-    .section h2{ margin-top:0 }
-    .callout{ background:#ffffff; }
-    /* Responsive layout */
-    @media (max-width: 980px){
-      .page-grid{ grid-template-columns:1fr }
-      .toc{ display:none }
-      .toc-chips{ display:block }
-    }
-    </style>
-    
-<!-- Theme override: Light Green -->
-    <style>
-      /* Tinted section + card backgrounds to replace pure white */
-      .section{ background:#ecfdf5; border-color:#bbf7d0; }
-      .card{ background:#ecfdf5; border-color:#bbf7d0; }
-      .callout{ background:#ecfdf5; border-color:#bbf7d0; }
-      /* Optional: soften list markers area slightly */
-      .nice-list li{ background:transparent; }
-    </style>
-    <style>
-      /* --- Python by the Numbers (glass cards) --- */
-      .section.stats{
-        background: linear-gradient(120deg, rgba(255,255,255,.55), rgba(255,255,255,.35));
-        border-color: rgba(255,255,255,.7);
-        backdrop-filter: blur(6px);
-      }
-      .num-grid{
-        display:grid;
-        grid-template-columns: repeat(3, minmax(0,1fr));
-        gap: 1rem;
-        align-items: stretch;
-      }
-      .num-card{
-        background: rgba(255,255,255,.65);
-        border: 1px solid var(--border);
-        border-radius: .9rem;
-        padding: 1.1rem;
-        text-align: center;
-        box-shadow: 0 8px 24px rgba(0,0,0,.06);
-      }
-      .num-card .kpi{
-        font-size: clamp(2rem, 6vw, 3rem);
-        font-weight: 800;
-        line-height: 1;
-        margin: .1rem 0 .3rem;
-        color: rgba(37, 99, 235, 1);
-      }
-      .num-card .label{
-        margin: 0;
-        color: var(--muted);
-      }
-      .section.stats h2 { text-align: center; }
-      @media (max-width: 900px){
-        .num-grid{ grid-template-columns: 1fr; }
-      }
-    </style>
-    <style>
-      /* Center and make it a touch smaller */
-      .why-title{
-        text-align: center;
-        font-size: clamp(1.25rem, 3vw, 1.8rem);
-        border-top: 3px solid rgba(37, 99, 235, 1);
-        border-bottom: 3px solid rgba(37, 99, 235, 1);
-        padding: .25rem 0;   /* space between the lines */
-        margin: .5rem 0;   /* space around the banner */
-      }
-    </style>
-    <style>
-      /* Sticky band that holds both the numbers and the banner title */
-      .sticky-band{
-        position: sticky;
-        top: calc(var(--header-h, 56px) + 0.5rem); /* sits just under your sticky header */
-        z-index: 30;                                /* header is z-index:40 */
-        background: var(--bg);
-      }
-
-      /* Tighten spacing inside the sticky band so it feels compact while fixed */
-      .sticky-band .section.stats{ margin-bottom: .5rem; }
-      .sticky-band .why-title{ margin: 0 0 .5rem; }
-
-      /* When jumping with TOC links, ensure sections aren't hidden under the sticky band */
-      .section{
-        scroll-margin-top: calc(var(--header-h, 56px) + var(--sticky-h, 0px) + 24px);
-      }
-
-      /* Make the left TOC stick *below* the sticky band */
-      .toc{
-        top: calc(var(--header-h, 56px) + var(--sticky-h, 0px) + 1rem) !important;
-      }
-      @media (min-width: 981px){
-        .page-grid > .toc{
-          position: fixed !important;
-          top: calc(var(--header-h, 56px) + var(--sticky-h, 0px) + 1rem) !important;
-          left: var(--toc-left, 0px);
-          width: 260px;
-          max-height: none;
-          overflow: visible; /* no inner scrollbars */
-          z-index: 25;       /* under header + drawer */
-        }
-      }
-      @media (min-width: 981px){
-        .page-grid > .content{
-          grid-column: 2 / 3;       /* ← reserve the right column for content */
-        }
-      }
-    </style>
-    <style>
-      /* ——— Compact the “Python by the Numbers” band ——— */
-
-      /* 1) Space between the title and the KPI boxes */
-      .section.stats {              /* reduce the section’s vertical padding */
-        padding: .25rem .75rem .5rem;
-      }
-      .section.stats h2 {           /* squeeze the gap below the heading */
-        margin: 0 0 .25rem;
-      }
-
-      /* 2) Space between the boxes themselves */
-      .num-grid {                   /* shrink the grid gap between cards */
-        gap: .25rem;
-      }
-      /* (Optional) if you want even tighter cards, also trim inner padding)
-      .num-card { padding: .75rem; }
-      */
-
-      /* 3) Space between the horizontal lines and the “Why Python…” text */
-      .why-title {                  /* less padding inside the banner lines */
-        padding: .25rem 0;
-        margin: .5rem 0;            /* tighten the space around the banner */
-      }
-
-      /* Keep the sticky band extra snug */
-      .sticky-band .section.stats { margin-bottom: .25rem; }
-      .sticky-band .why-title      { margin: 0; }
-
-      .arrow-list{
-        list-style: none;
-        margin: 0;
-        padding: 0;
-      }
-      .arrow-list li{
-        position: relative;
-        margin: .25rem 0;
-        padding-left: 1.75rem;             /* space for the arrow badge */
-      }
-      .arrow-list li::before{
-        content: "→";
-        position: absolute;
-        left: 0; top: .15rem;
-        width: 1.2rem; height: 1.2rem;
-        line-height: 1.2rem;
-        text-align: center;
-        font-weight: 800;
-        font-size: .9rem;
-        color: rgba(37, 99, 235, 1);       /* the same blue you’re using */
-        border: 1px solid rgba(37,99,235,.25);
-        background: rgba(37,99,235,.08);
-        border-radius: .6rem;              /* pill/circle look */
-      }
-      .arrow-list .sublist{
-        list-style: none;
-        margin: .25rem 0 0 .5rem;   /* small indent below the parent line */
-        padding-left: 1rem;         /* indent the sub-items */
-      }
-      .arrow-list .sublist li{
-        position: relative;
-        margin: .15rem 0;
-        padding-left: 1rem;         /* room for the chevron */
-      }
-      .arrow-list .sublist li::before{
-        content: "›";               /* smaller chevron for sub-items */
-        position: absolute;
-        left: 0; top: .15rem;
-        width: 1rem; height: 1rem;
-        line-height: 1rem;
-        text-align: center;
-        font-weight: 800;
-        font-size: .9rem;
-        color: rgba(37, 99, 235, 1); /* same blue as your KPIs */
-        border: none;
-        background: transparent;
-      }
-    </style>
 </head>
 <body>
 
@@ -264,163 +23,135 @@
     <nav class="drawer" id="drawer" aria-label="More">
       <a href="why-python.html">Why Python</a>
       <a href="my-story.html">My Story</a>
+      <a href="setup_requirement.html">Setup/Requirements</a>
     </nav>
   </div>
 </header>
 
-  <main class="container">
+<main class="container">
+  <!-- Python by the Numbers -->
+  <div class="sticky-band" id="sticky-band">
     <!-- Python by the Numbers -->
-    <div class="sticky-band" id="sticky-band">
-      <!-- Python by the Numbers -->
-      <section class="section stats" id="numbers">
-        <h2>Python by the Numbers</h2>
-        <div class="num-grid">
-          <div class="num-card">
-            <div class="kpi">2M+</div>
-            <p class="label">Python packages available on PyPI</p>
-          </div>
-          <div class="num-card">
-            <div class="kpi">80%</div>
-            <p class="label">Of developers use Python as their main language <span class="muted">(Stack Overflow 2023)</span></p>
-          </div>
-          <div class="num-card">
-            <div class="kpi">10M+</div>
-            <p class="label">Active Python developers worldwide</p>
-          </div>
+    <section class="section stats" id="numbers">
+      <h2>Python by the Numbers</h2>
+      <div class="num-grid">
+        <div class="num-card">
+          <div class="kpi">2M+</div>
+          <p class="label">Python packages available on PyPI</p>
         </div>
-      </section>
-      <h2 class="text-2xl md:text-3xl font-semibold text-gray-800 mb-8 text-center why-title">
-        Why Python is so popular?
-      </h2>
-    </div>
-    <nav class="toc-chips" aria-label="On this page"><a href="#1">Simple & Readable</a><a href="#2">Widespread Use in Academia</a><a href="#3">Versatile Across Domains</a><a href="#4">Massive Ecosystem & Libraries</a><a href="#5">Large, Supportive Community</a><a href="#6">Cross-Platform & Open Source</a><a href="#7">Trusted by Industry Leaders</a></nav>
-    <div class="page-grid">
-      <aside class="toc" aria-label="On this page">
-        <h3>On this page</h3>
-        <ol>
-          <li><a href="#1">Simple & Readable</a></li><li><a href="#2">Widespread Use in Academia</a></li><li><a href="#3">Versatile Across Domains</a></li><li><a href="#4">Massive Ecosystem & Libraries</a></li><li><a href="#5">Large, Supportive Community</a></li><li><a href="#6">Cross-Platform & Open Source</a></li><li><a href="#7">Trusted by Industry Leaders</a></li>
-        </ol>
-      </aside>
-      <div class="content">
-
-    <!-- 1) FOUNDATIONS -->
-    <section class="section" id="1">
-      <h2>Simple & Readable</h2>
-      <ul class="arrow-list">
-        <li>Readable, English-like syntax with real-world relevance</li>
-        <li>Developers onboard quickly and maintain code with less friction</li>
-        <li>Simplifies rapid prototyping with minimal code</li>
-      </ul>
-    </section>
-
-    <section class="section" id="2">
-      <h2>Widespread Use in Academia</h2>
-      <ul class="arrow-list">
-        <li>Most widely taught first School Programming Language (all levels)</li>
-        <li>Python teaches kids how to think logically and break problems into steps</li>
-        <li>Python connects with
-          <ul class="sublist">
-            <li><strong>Math</strong> [graphs/fractions]</li>
-            <li><strong>Science</strong> [experiments/data]</li>
-            <li><strong>Art</strong> [games/music/design]</li>
-          </ul>
-        </li>
-      </ul>
-    </section>
-
-    <!-- 2) OOP -->
-    <section class="section" id="3">
-      <h2>Versatile Across Domains</h2>
-      <ul class="arrow-list">
-        <li>General-purpose language used for many types of projects</li>
-        <li>Powers web backends, AI/ML pipelines, data analysis, scientific computing, and automation</li>
-        <li>Applicable across finance, DevOps, IoT, and more</li>
-      </ul>
-    </section>
-
-    <!-- 2) OOP -->
-    <section class="section" id="4">
-      <h2>Massive Ecosystem & Libraries</h2>
-      <ul class="arrow-list">
-        <li>Hundreds of thousands of packages on PyPI</li>
-        <li>Libraries cover NLP, visualization, web scraping, and more</li>
-        <li>Well-maintained packages accelerate development and promote best practices</li>
-      </ul>
-    </section>
-
-    <!-- 2) OOP -->
-    <section class="section" id="5">
-      <h2>Large, Supportive Community</h2>
-      <ul class="arrow-list">
-        <li>Massive global community contributing to growth</li>
-        <li>Shared knowledge base shortens debugging and learning curves</li>
-        <li>Thriving open-source projects for collaboration</li>
-      </ul>
-    </section>
-
-
-    <!-- 2) OOP -->
-    <section class="section" id="6">
-      <h2>Cross-Platform & Open Source</h2>
-      <ul class="arrow-list">
-        <li>Runs seamlessly on Windows, macOS, and Linux</li>
-        <li>Completely free and open source, avoiding licensing costs</li>
-        <li>One codebase can be deployed across laptops, servers, and cloud containers</li>
-      </ul>
-    </section>
-
-    <!-- 2) OOP -->
-    <section class="section" id="7">
-      <h2>Trusted by Industry Leaders</h2>
-      <ul class="arrow-list">
-        <li>Adopted by organizations like Google, Microsoft, Netflix, Spotify, and NASA</li>
-        <li>Enterprise adoption creates strong job demand</li>
-        <li>Ensures ecosystem continues evolving with real-world needs</li>
-      </ul>
-    </section>
-
-    <a class="btn" href="signup.html">Start Learning</a>
-
-          </div>
+        <div class="num-card">
+          <div class="kpi">80%</div>
+          <p class="label">Of developers use Python as their main language <span class="muted">(Stack Overflow 2023)</span></p>
         </div>
-  </main>
+        <div class="num-card">
+          <div class="kpi">10M+</div>
+          <p class="label">Active Python developers worldwide</p>
+        </div>
+      </div>
+    </section>
+    <h2 class="text-2xl md:text-3xl font-semibold text-gray-800 mb-8 text-center why-title">
+      Why Python is so popular?
+    </h2>
+  </div>
+  <nav class="toc-chips" aria-label="On this page"><a href="#1">Simple & Readable</a><a href="#2">Widespread Use in Academia</a><a href="#3">Versatile Across Domains</a><a href="#4">Massive Ecosystem & Libraries</a><a href="#5">Large, Supportive Community</a><a href="#6">Cross-Platform & Open Source</a><a href="#7">Trusted by Industry Leaders</a></nav>
+  <div class="page-grid">
+    <aside class="toc" aria-label="On this page">
+      <h3>On this page</h3>
+      <ol>
+        <li><a href="#1">Simple & Readable</a></li><li><a href="#2">Widespread Use in Academia</a></li><li><a href="#3">Versatile Across Domains</a></li><li><a href="#4">Massive Ecosystem & Libraries</a></li><li><a href="#5">Large, Supportive Community</a></li><li><a href="#6">Cross-Platform & Open Source</a></li><li><a href="#7">Trusted by Industry Leaders</a></li>
+      </ol>
+    </aside>
+  <div class="content">
 
-  <footer class="site-footer">
-    <div class="container">
-      <p>&copy; <span id="year"></span> iPythonTime — All rights reserved.</p>
-    </div>
-  </footer>
+  <!-- 1) FOUNDATIONS -->
+  <section class="section" id="1">
+    <h2>Simple & Readable</h2>
+    <ul class="arrow-list">
+      <li>Readable, English-like syntax with real-world relevance</li>
+      <li>Developers onboard quickly and maintain code with less friction</li>
+      <li>Simplifies rapid prototyping with minimal code</li>
+    </ul>
+  </section>
 
-  <script src="assets/js/main.js"></script>
+  <section class="section" id="2">
+    <h2>Widespread Use in Academia</h2>
+    <ul class="arrow-list">
+      <li>Most widely taught first School Programming Language (all levels)</li>
+      <li>Python teaches kids how to think logically and break problems into steps</li>
+      <li>Python connects with
+        <ul class="sublist">
+          <li><strong>Math</strong> [graphs/fractions]</li>
+          <li><strong>Science</strong> [experiments/data]</li>
+          <li><strong>Art</strong> [games/music/design]</li>
+        </ul>
+      </li>
+    </ul>
+  </section>
+
+  <!-- 2) OOP -->
+  <section class="section" id="3">
+    <h2>Versatile Across Domains</h2>
+    <ul class="arrow-list">
+      <li>General-purpose language used for many types of projects</li>
+      <li>Powers web backends, AI/ML pipelines, data analysis, scientific computing, and automation</li>
+      <li>Applicable across finance, DevOps, IoT, and more</li>
+    </ul>
+  </section>
+
+  <!-- 2) OOP -->
+  <section class="section" id="4">
+    <h2>Massive Ecosystem & Libraries</h2>
+    <ul class="arrow-list">
+      <li>Hundreds of thousands of packages on PyPI</li>
+      <li>Libraries cover NLP, visualization, web scraping, and more</li>
+      <li>Well-maintained packages accelerate development and promote best practices</li>
+    </ul>
+  </section>
+
+  <!-- 2) OOP -->
+  <section class="section" id="5">
+    <h2>Large, Supportive Community</h2>
+    <ul class="arrow-list">
+      <li>Massive global community contributing to growth</li>
+      <li>Shared knowledge base shortens debugging and learning curves</li>
+      <li>Thriving open-source projects for collaboration</li>
+    </ul>
+  </section>
 
 
-    <script>
-    // Smooth scroll for in-page links (course page only)
-    document.querySelectorAll('a[href^="#"]').forEach(a=>{
-      a.addEventListener('click', (e)=>{
-        const id = a.getAttribute('href').slice(1);
-        const el = document.getElementById(id);
-        if (el){
-          e.preventDefault();
-          el.scrollIntoView({behavior:'smooth', block:'start'});
-          history.replaceState(null, '', '#'+id);
-        }
-      });
-    });
-    // Scroll spy: highlight current section in TOC (aside + chips)
-    const links = Array.from(document.querySelectorAll('.toc a, .toc-chips a'));
-    const targets = links.map(a=> document.querySelector(a.getAttribute('href')) ).filter(Boolean);
-    const onIntersect = (entries)=>{
-      entries.forEach(entry=>{
-        if (entry.isIntersecting){
-          const id = '#'+entry.target.id;
-          links.forEach(a=> a.classList.toggle('active', a.getAttribute('href')===id));
-        }
-      });
-    };
-    const obs = new IntersectionObserver(onIntersect, {rootMargin:'-30% 0px -60% 0px', threshold:0});
-    targets.forEach(t=> obs.observe(t));
-    </script>
-    
+  <!-- 2) OOP -->
+  <section class="section" id="6">
+    <h2>Cross-Platform & Open Source</h2>
+    <ul class="arrow-list">
+      <li>Runs seamlessly on Windows, macOS, and Linux</li>
+      <li>Completely free and open source, avoiding licensing costs</li>
+      <li>One codebase can be deployed across laptops, servers, and cloud containers</li>
+    </ul>
+  </section>
+
+  <!-- 2) OOP -->
+  <section class="section" id="7">
+    <h2>Trusted by Industry Leaders</h2>
+    <ul class="arrow-list">
+      <li>Adopted by organizations like Google, Microsoft, Netflix, Spotify, and NASA</li>
+      <li>Enterprise adoption creates strong job demand</li>
+      <li>Ensures ecosystem continues evolving with real-world needs</li>
+    </ul>
+  </section>
+
+  <a class="btn" href="signup.html">Start Learning</a>
+
+        </div>
+      </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>&copy; <span id="year"></span> iPythonTime — All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+
 </body>
 </html>
