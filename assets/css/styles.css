@@ -570,7 +570,7 @@ targets.forEach(t=> obs.observe(t));
 @media (max-width: 640px) {
   .site-header nav.drawer {
     /* use a flexible width that comfortably fits long items */
-    width: clamp(300px, 80vw, 420px);
+    width: clamp(250px, 65vw, 420px);
   }
   .site-header nav.drawer a {
     white-space: normal;        /* allow wrapping */
