@@ -565,3 +565,13 @@ targets.forEach(t=> obs.observe(t));
     border: none;
     background: transparent;
 }
+@media (max-width: 640px) {
+  .site-header nav.drawer {
+    /* use a flexible width that comfortably fits long items */
+    width: clamp(300px, 80vw, 420px);
+  }
+  .site-header nav.drawer a {
+    white-space: normal;        /* allow wrapping */
+    word-break: break-word;     /* break long tokens like Setup/Requirements */
+  }
+}
