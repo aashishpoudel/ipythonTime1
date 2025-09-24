@@ -162,13 +162,16 @@ document.addEventListener('click', (e) => {
       comment: (form.comment?.value?.trim?.() || null),
     };
 
-    // Collect multi-select Preferred Time → comma string
-    const ptEl   = document.getElementById('preferred_time');
-    const times  = Array.from(ptEl?.selectedOptions || []).map(o => o.value);
-    const ptJoin = times.join(',');
+    // Collect Preferred Time from chips (fallback to hidden <select> if needed)
+    const chipNodes = document.querySelectorAll('input[name="preferred_time"]:checked');
+    let times = Array.from(chipNodes).map(el => el.value);
 
-    // add to payload
-    payload.preferred_time = ptJoin;
+    if (!times.length) {
+      const ptEl = document.getElementById('preferred_time'); // hidden fallback
+      if (ptEl) times = Array.from(ptEl.selectedOptions || []).map(o => o.value);
+    }
+
+    payload.preferred_time = times.join(',');
 
     // --- Age policy fields for backend + later UI ---
     const ageYears = form._computeAgeYears?.(form.dob?.value);

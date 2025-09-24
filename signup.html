@@ -90,12 +90,26 @@
 
       <fieldset class="fieldset">
         <legend>Preferences</legend>
-        <label for="preferred_time">Preferred Time</label>
-        <select id="preferred_time" name="preferred_time[]" multiple>
+
+        <label>Preferred Time</label>
+        <div class="choice-chips" id="preferred_time_chips">
+          <input type="checkbox" id="pt-weekend" value="weekend" name="preferred_time">
+          <label for="pt-weekend">Weekend</label>
+
+          <input type="checkbox" id="pt-weekday-afternoon" value="weekday afternoon" name="preferred_time">
+          <label for="pt-weekday-afternoon">Weekday Afternoon</label>
+
+          <input type="checkbox" id="pt-weekday-evening" value="weekday evening" name="preferred_time">
+          <label for="pt-weekday-evening">Weekday Evening</label>
+        </div>
+
+        <!-- (Optional) Keep the original select hidden for fallback -->
+        <select id="preferred_time" name="preferred_time[]" multiple hidden>
           <option value="weekend">Weekend</option>
           <option value="weekday afternoon">Weekday Afternoon</option>
           <option value="weekday evening">Weekday Evening</option>
         </select>
+
         <label>Learning Goal
           <textarea name="goal" rows="4" required placeholder="e.g., fundamentals, build games, homework help"></textarea>
         </label>

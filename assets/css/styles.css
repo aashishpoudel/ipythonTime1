@@ -580,3 +580,36 @@ targets.forEach(t=> obs.observe(t));
     word-break: break-word;     /* break long tokens like Setup/Requirements */
   }
 }
+
+.choice-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.choice-chips input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.choice-chips label {
+  display: inline-block;
+  padding: .5rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #fff;
+  cursor: pointer;
+  user-select: none;
+}
+
+.choice-chips input[type="checkbox"]:focus + label {
+  outline: 2px solid #93c5fd; /* visible keyboard focus */
+  outline-offset: 2px;
+}
+
+.choice-chips input[type="checkbox"]:checked + label {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+}
