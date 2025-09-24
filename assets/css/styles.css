@@ -407,6 +407,9 @@ targets.forEach(t=> obs.observe(t));
 /* Tinted section + card backgrounds to replace pure white */
 .section{ background:#ecfdf5; border-color:#bbf7d0; }
 .card{ background:#ecfdf5; border-color:#bbf7d0; }
+.card h3 {
+  text-align: center;
+}
 .callout{ background:#ecfdf5; border-color:#bbf7d0; }
 /* Optional: soften list markers area slightly */
 /*Theme override: Light Green*/
