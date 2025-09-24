@@ -72,6 +72,7 @@ document.addEventListener('click', (e) => {
 })();
 
 (function () {
+  "use strict";
   const form = document.getElementById('signupForm');
   if (!form) return;
   const msg  = document.getElementById('formMsg');
