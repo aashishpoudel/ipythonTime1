@@ -156,9 +156,6 @@ document.addEventListener('click', (e) => {
       state_label:  stateSel?.selectedOptions?.[0]?.textContent || null,
       city:            form.city?.value || null,
       timezone:        form.timezone?.value || null,
-      goal: [
-        form.goal?.value ? `${form.goal.value}` : null,
-      ].filter(Boolean).join(' | '),
       comment: (form.comment?.value?.trim?.() || null),
     };
 
@@ -166,9 +163,14 @@ document.addEventListener('click', (e) => {
     const ptEl   = document.getElementById('preferred_time');
     const times  = Array.from(ptEl?.selectedOptions || []).map(o => o.value);
     const ptJoin = times.join(',');
-
-    // add to payload
     payload.preferred_time = ptJoin;
+
+    // Collect multi-select Learning Goals → comma string
+    const goalEl  = document.getElementById('goal');
+    const goals   = Array.from(goalEl?.selectedOptions || []).map(o => o.value);
+    const other = (form.other_goal?.value || '').trim();
+    if (other) goals.push(other);
+    payload.goal = goals.join(',');
 
     // --- Age policy fields for backend + later UI ---
     const ageYears = form._computeAgeYears?.(form.dob?.value);
