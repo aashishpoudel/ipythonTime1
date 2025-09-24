@@ -108,8 +108,8 @@ export default {
 			to: safeEmail,
 			subject: "Thanks for signing up with iPythonTime!",
 			html: `
-			  ${showAgeNotice ? `<p><strong>${escapeHtml(agePolicyMsg)}</strong></p>` : ""}
 			  <p>Hi ${escapeHtml(safeName) || "there"},</p>
+			  ${showAgeNotice ? `<p><strong>${escapeHtml(agePolicyMsg)}</strong></p>` : ""}
 			  <p>Thanks for signing up at iPythonTime! We’ll reach out soon with timeslots and next steps.</p>
 			  <p>– The iPythonTime Team</p>`
 		  };
