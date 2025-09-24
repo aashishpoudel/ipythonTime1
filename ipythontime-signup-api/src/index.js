@@ -46,15 +46,21 @@ export default {
 
       if (!body?.email) return json({ ok:false, error:"Missing email" }, 400, cors);
 
+      const ageYears = Number.isFinite(Number(body.age_years))
+	  ? Math.trunc(Number(body.age_years))
+	  : null;
+
+	  const agePolicyMsg = body.age_policy_message ?? null;
+	  const showAgeNotice = (ageYears != null && ageYears < 7 && !!agePolicyMsg);
+
       // 1) Build the SQL (DEFINE THE VARIABLE)
 		const stmt = `
 		  INSERT INTO signups
 		   (who_is_learning, student_name, student_dob, parent_name, email, phone,
 			phone_country_iso, phone_dial_code, country_iso, country_label,
-			state, city, timezone, preferred_time, goal, comment)
-		  VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,
-				  ?11,
-				  ?12,?13,?14,?15,?16)
+			state, city, timezone, preferred_time, goal, comment,
+			age_years, age_policy_message)
+		  VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14,?15,?16,?17,?18)
 		`;
 
 		// 2) Keep your existing vals (already correct)
@@ -72,9 +78,11 @@ export default {
 		  (body.state ?? body.state_label ?? null),
 		  body.city ?? null,
 		  body.timezone ?? null,
-		  (body.preferred_time ?? null),  // <- this gets saved
+		  (body.preferred_time ?? null),
 		  body.goal ?? null,
 		  body.comment ?? null,
+		  ageYears,
+		  agePolicyMsg
 		];
 
       try {
@@ -99,9 +107,11 @@ export default {
 			from: "iPythonTime <noreply@ipythontime.com>",   // must be verified in Resend
 			to: safeEmail,
 			subject: "Thanks for signing up with iPythonTime!",
-			html: `<p>Hi ${escapeHtml(safeName) || "there"},</p>
-				   <p>Thanks for signing up at iPythonTime! We’ll reach out soon with timeslots and next steps.</p>
-				   <p>– The iPythonTime Team</p>`
+			html: `
+			  <p>Hi ${escapeHtml(safeName) || "there"},</p>
+			  ${showAgeNotice ? `<p><strong>${escapeHtml(agePolicyMsg)}</strong></p>` : ""}
+			  <p>Thanks for signing up at iPythonTime! We’ll reach out soon with timeslots and next steps.</p>
+			  <p>– The iPythonTime Team</p>`
 		  };
 		  console.log("[submit] sending user email", { to: userPayload.to });
 		  const userRes  = await fetch("https://api.resend.com/emails", {
@@ -126,6 +136,7 @@ export default {
 			  to: ["aashish.pd@gmail.com", "poulaashish@yahoo.com"],
 			  subject: "New signup received",
 			  html: `
+				${showAgeNotice ? `<p><strong>Age notice:</strong> ${escapeHtml(agePolicyMsg)}</p>` : ""}
 				<p><strong>New signup</strong></p>
 				<table border="1" cellpadding="6" cellspacing="0">
 				  <tr><td><b>Who is learning</b></td><td>${escapeHtml(body.who_is_learning || "")}</td></tr>
@@ -144,6 +155,8 @@ export default {
 				  <tr><td><b>Goal</b></td><td>${escapeHtml(body.goal || "")}</td></tr>
 				  <tr><td><b>Comment</b></td><td>${escapeHtml(body.comment || "")}</td></tr>
 				  <tr><td><b>Submitted at</b></td><td>${new Date().toISOString()}</td></tr>
+				  <tr><td><b>Age (years)</b></td><td>${escapeHtml(ageYears ?? "")}</td></tr>
+				  <tr><td><b>Age policy</b></td><td>${escapeHtml(agePolicyMsg || "")}</td></tr>
 				</table>
 				<hr/>
 			    <h2>All Signups (latest first)</h2>

@@ -209,10 +209,10 @@ document.addEventListener('click', (e) => {
 
         const noteEl = document.getElementById('age_notice');
         if (ageMsg) {
-          if (msg) msg.textContent = ageMsg;          // show age-based message after successful submit
-          if (noteEl) { noteEl.textContent = ageMsg; noteEl.style.display = 'block'; }
+          // Show ONLY the age-based message under the button
+          if (msg) msg.textContent = ageMsg;
         } else {
-          // Keep your current success copy for 7+
+          // Otherwise show your normal success copy
           if (anyEmailSent === true) {
             if (msg) msg.textContent = 'Thanks! We received your request and sent a confirmation email.';
           } else if (anyEmailSent === false) {
@@ -380,7 +380,7 @@ document.addEventListener('click', (e) => {
 
   function buildAgeMessage(name, years) {
     if (Number.isNaN(years)) return '';
-    if (years < 5) return `${name} is too young for our Python class. This class is suited for Age>7. Sorry for that.`;
+    if (years < 5) return `${name} is too young for our Python class. This class is suited for Age 7 or higher. Sorry for that.`;
     if (years < 7) return `${name} age is <7 (ideal minimum age). We will keep your child in record and contact you later.`;
     return '';
   }
