@@ -72,7 +72,6 @@ document.addEventListener('click', (e) => {
 })();
 
 (function () {
-  "use strict";
   const form = document.getElementById('signupForm');
   if (!form) return;
   const msg  = document.getElementById('formMsg');
@@ -163,27 +162,13 @@ document.addEventListener('click', (e) => {
       comment: (form.comment?.value?.trim?.() || null),
     };
 
-    // Collect multi-select Preferred Time
-    const ptEl = document.getElementById('preferred_time');
-    const ptOut  = document.getElementById('preferred_time_readout');
+    // Collect multi-select Preferred Time → comma string
+    const ptEl   = document.getElementById('preferred_time');
+    const times  = Array.from(ptEl?.selectedOptions || []).map(o => o.value);
+    const ptJoin = times.join(',');
 
-    function updatePreferredTimeReadout() {
-      if (!ptEl || !ptOut) return;
-      const labels = Array.from(ptEl.selectedOptions).map(o => o.textContent.trim());
-      ptOut.textContent = labels.length ? labels.join(', ') : '— Choose preferred times —';
-    }
-
-    ptEl?.addEventListener('change', updatePreferredTimeReadout);
-    document.addEventListener('DOMContentLoaded', updatePreferredTimeReadout);
-    updatePreferredTimeReadout();
-    const ptCodes  = Array.from(ptEl?.selectedOptions || []).map(o => o.value);
-    const ptLabels = Array.from(ptEl?.selectedOptions || []).map(o => o.textContent.trim());
-
-    // Store pretty, human-readable labels
-    payload.preferred_time = ptLabels.join(', ');        // e.g., "Weekend, Weekday Afternoon"
-
-    // (Optional) also keep machine-friendly codes if your DB/reporting wants them
-    payload.preferred_time_codes = ptCodes.join(',');    // e.g., "weekend,weekday afternoon"
+    // add to payload
+    payload.preferred_time = ptJoin;
 
     try {
       const res  = await fetch(API_URL, {
