@@ -96,9 +96,15 @@
           <option value="weekday afternoon">Weekday Afternoon</option>
           <option value="weekday evening">Weekday Evening</option>
         </select>
-        <label>Learning Goal
-          <textarea name="goal" rows="4" required placeholder="e.g., fundamentals, build games, homework help"></textarea>
-        </label>
+        <label for="goal">Learning Goals</label>
+        <select id="goal" name="goal[]" multiple size="6">
+          <option value="fundamentals">Master Python Fundamentals</option>
+          <option value="build games">Develop Problem-Solving Skills</option>
+          <option value="homework help">Apply Python to Math & Science</option>
+          <option value="data science (beginner)">Create Real-World Projects</option>
+          <option value="web/apps (Flask/Streamlit)">Explore Data & AI</option>
+          <option value="automation (scripts)">Unleash Creativity with Coding</option>
+        </select>
       </fieldset>
       <input type="hidden" name="timezone" id="timezone" />
 

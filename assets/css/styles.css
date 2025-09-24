@@ -580,3 +580,14 @@ targets.forEach(t=> obs.observe(t));
     word-break: break-word;     /* break long tokens like Setup/Requirements */
   }
 }
+#goal {
+  width: 100%;
+  min-height: 10rem;       /* show ~6 rows comfortably */
+  padding: .5rem .6rem;
+  border: 1px solid var(--border);
+  border-radius: .5rem;
+  background: #fff;
+}
+#goal option {
+  padding: .35rem .25rem;
+}
