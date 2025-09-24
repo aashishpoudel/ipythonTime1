@@ -264,15 +264,6 @@ input[type="date"]::-webkit-clear-button {
   background: #3b82f6; /* tailwind blue-500; tweak if desired */
 }
 
-/* Features band under pricing grid */
-.feature-band{
-  margin-top: .75rem;
-  background: rgba(255,255,255,.65);
-  border: 1px solid var(--border);
-  border-radius: .75rem;
-  padding: .75rem 1rem;
-}
-
 /* One-line, centered list that wraps nicely */
 .feature-list{
   list-style: none;
@@ -290,6 +281,8 @@ input[type="date"]::-webkit-clear-button {
   padding-left: 1.75rem;   /* space for arrow */
   text-align: left;        /* keep text left-aligned relative to arrow */
   width: 100%;             /* ensure consistent alignment */
+  font-size: 1.25rem;
+  font-weight: 600;
 }
 
 .feature-list li::before{
@@ -308,6 +301,34 @@ input[type="date"]::-webkit-clear-button {
   box-shadow: 0 1px 0 rgba(0,0,0,.06);
 }
 
+.feature-band {
+  margin-top: .75rem;
+  background: rgba(255,255,255,.65);
+  border: 1px solid var(--border);
+  border-radius: .75rem;
+  padding: .75rem 1rem;
+
+  display: flex;                 /* 🔹 enable flexbox */
+  align-items: center;           /* 🔹 vertical centering */
+  justify-content: center;       /* 🔹 center horizontally */
+}
+.feature-band .feature-list {
+  display: flex;                 /* stack with flex */
+  flex-direction: column;        /* vertical list */
+  justify-content: center;       /* vertical center inside parent */
+  align-items: center;           /* horizontally center text block */
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.feature-band .feature-list li {
+  position: relative;
+  margin: .5rem 0;
+  padding-left: 1.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
 /* Tweak plan headings for consistency */
 .plan h3{
   margin: 0;
@@ -318,26 +339,26 @@ input[type="date"]::-webkit-clear-button {
 
 // Smooth scroll for in-page links (course page only) - for why-python and setup page
 document.querySelectorAll('a[href^="#"]').forEach(a=>{
-a.addEventListener('click', (e)=>{
-  const id = a.getAttribute('href').slice(1);
-  const el = document.getElementById(id);
-  if (el){
-    e.preventDefault();
-    el.scrollIntoView({behavior:'smooth', block:'start'});
-    history.replaceState(null, '', '#'+id);
-  }
-});
+    a.addEventListener('click', (e)=>{
+      const id = a.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if (el){
+        e.preventDefault();
+        el.scrollIntoView({behavior:'smooth', block:'start'});
+        history.replaceState(null, '', '#'+id);
+      }
+    });
 });
 // Scroll spy: highlight current section in TOC (aside + chips)
 const links = Array.from(document.querySelectorAll('.toc a, .toc-chips a'));
 const targets = links.map(a=> document.querySelector(a.getAttribute('href')) ).filter(Boolean);
 const onIntersect = (entries)=>{
-entries.forEach(entry=>{
-  if (entry.isIntersecting){
-    const id = '#'+entry.target.id;
-    links.forEach(a=> a.classList.toggle('active', a.getAttribute('href')===id));
-  }
-});
+    entries.forEach(entry=>{
+      if (entry.isIntersecting){
+        const id = '#'+entry.target.id;
+        links.forEach(a=> a.classList.toggle('active', a.getAttribute('href')===id));
+      }
+    });
 };
 const obs = new IntersectionObserver(onIntersect, {rootMargin:'-30% 0px -60% 0px', threshold:0});
 targets.forEach(t=> obs.observe(t));
