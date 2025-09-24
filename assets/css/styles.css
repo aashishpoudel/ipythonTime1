@@ -613,3 +613,26 @@ targets.forEach(t=> obs.observe(t));
   color: #fff;
   border-color: var(--brand);
 }
+
+@media (min-width: 981px) {
+  #preferred_time { display: block; }
+  #preferred_time_chips { display: none; }
+}
+
+/* Mobile/tablet: show chips, hide native select */
+@media (max-width: 980px) {
+  #preferred_time { display: none; }
+  #preferred_time_chips { display: flex; }
+}
+
+/* Make the desktop multi-select easier to use */
+#preferred_time {
+  width: 100%;
+  min-height: 7.5rem;     /* ~3 rows comfortably */
+  padding: .5rem .6rem;
+  border: 1px solid var(--border);
+  border-radius: .5rem;
+  background: #fff;
+}
+#preferred_time option {
+  padding: .35rem .25rem;
