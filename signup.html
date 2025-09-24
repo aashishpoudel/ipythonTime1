@@ -91,7 +91,7 @@
       <fieldset class="fieldset">
         <legend>Preferences</legend>
         <label for="preferred_time">Preferred Time</label>
-        <select id="preferred_time" name="preferred_time" multiple>
+        <select id="preferred_time" name="preferred_time[]" multiple>
           <option value="weekend">Weekend</option>
           <option value="weekday afternoon">Weekday Afternoon</option>
           <option value="weekday evening">Weekday Evening</option>
@@ -101,6 +101,10 @@
         </label>
       </fieldset>
       <input type="hidden" name="timezone" id="timezone" />
+
+      <!-- NEW: include computed age + message so it goes to your backend/email -->
+      <input type="hidden" name="age_years" id="age_years" />
+      <input type="hidden" name="age_policy_message" id="age_policy_message" />
 
       <button class="btn" type="submit">Submit</button>
     </form>

@@ -170,6 +170,12 @@ document.addEventListener('click', (e) => {
     // add to payload
     payload.preferred_time = ptJoin;
 
+    // --- Age policy fields for backend + later UI ---
+    const ageYears = form._computeAgeYears?.(form.dob?.value);
+    const ageMsg   = form._buildAgeMessage?.((form.name?.value || 'Student').trim(), ageYears);
+    payload.age_years = Number.isNaN(ageYears) ? null : ageYears;
+    payload.age_policy_message = ageMsg || null;
+
     try {
       const res  = await fetch(API_URL, {
         method: 'POST',
@@ -201,7 +207,27 @@ document.addEventListener('click', (e) => {
           if (msg) msg.textContent = 'Thanks! We received your request. We’ll contact you shortly.';
         }
 
+        const noteEl = document.getElementById('age_notice');
+        if (ageMsg) {
+          if (msg) msg.textContent = ageMsg;          // show age-based message after successful submit
+          if (noteEl) { noteEl.textContent = ageMsg; noteEl.style.display = 'block'; }
+        } else {
+          // Keep your current success copy for 7+
+          if (anyEmailSent === true) {
+            if (msg) msg.textContent = 'Thanks! We received your request and sent a confirmation email.';
+          } else if (anyEmailSent === false) {
+            if (msg) msg.textContent = 'Thanks! We received your request. (Email did not send yet.)';
+            console.warn("[frontend] email errors", {
+              user: data.email_user_error,
+              admin: data.email_admin_error
+            });
+          } else {
+            if (msg) msg.textContent = 'Thanks! We received your request. We’ll contact you shortly.';
+          }
+        }
+
         form.reset();
+        if (!ageMsg && noteEl) { noteEl.style.display = 'none'; noteEl.textContent = ''; }
       } else {
         if (msg) msg.textContent = 'Sorry—something went wrong. Please try again.';
         console.error('[frontend] Submit error:', data);
@@ -334,5 +360,33 @@ document.addEventListener('click', (e) => {
   setTocLeft();
   window.addEventListener('resize', setTocLeft);
   window.addEventListener('load', setTocLeft);
+})();
+
+// --- Age helpers (no UI until submit success) ---
+(function () {
+  const form = document.getElementById('signupForm');
+  if (!form) return;
+
+  function computeAgeYears(iso) {
+    if (!iso) return NaN;
+    const dob = new Date(iso);
+    if (isNaN(dob)) return NaN;
+    const today = new Date();
+    let y = today.getFullYear() - dob.getFullYear();
+    const m = today.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) y--;
+    return y;
+  }
+
+  function buildAgeMessage(name, years) {
+    if (Number.isNaN(years)) return '';
+    if (years < 5) return `${name} is too young for our Python class. This class is suited for Age>7. Sorry for that.`;
+    if (years < 7) return `${name} age is <7 (ideal minimum age). We will keep your child in record and contact you later.`;
+    return '';
+  }
+
+  // expose helpers to submit handler
+  form._computeAgeYears = computeAgeYears;
+  form._buildAgeMessage = buildAgeMessage;
 })();
 

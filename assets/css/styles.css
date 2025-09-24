@@ -427,7 +427,7 @@ targets.forEach(t=> obs.observe(t));
     background: rgba(255,255,255,.65);
     border: 1px solid var(--border);
     border-radius: .9rem;
-    padding: 1.1rem;
+    padding: 0.8rem;
     text-align: center;
     box-shadow: 0 8px 24px rgba(0,0,0,.06);
 }
@@ -570,7 +570,7 @@ targets.forEach(t=> obs.observe(t));
 @media (max-width: 640px) {
   .site-header nav.drawer {
     /* use a flexible width that comfortably fits long items */
-    width: clamp(300px, 80vw, 420px);
+    width: clamp(250px, 65vw, 420px);
   }
   .site-header nav.drawer a {
     white-space: normal;        /* allow wrapping */

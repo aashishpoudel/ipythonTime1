@@ -51,8 +51,7 @@ export default {
 		  INSERT INTO signups
 		   (who_is_learning, student_name, student_dob, parent_name, email, phone,
 			phone_country_iso, phone_dial_code, country_iso, country_label,
-			state,
-			city, timezone, preferred_time, goal, comment)
+			state, city, timezone, preferred_time, goal, comment)
 		  VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,
 				  ?11,
 				  ?12,?13,?14,?15,?16)
