@@ -46,15 +46,20 @@ export default {
 
       if (!body?.email) return json({ ok:false, error:"Missing email" }, 400, cors);
 
+      const ageYears = Number.isFinite(Number(body.age_years))
+	  ? Math.trunc(Number(body.age_years))
+	  : null;
+
+	  const agePolicyMsg = body.age_policy_message ?? null;
+
       // 1) Build the SQL (DEFINE THE VARIABLE)
 		const stmt = `
 		  INSERT INTO signups
 		   (who_is_learning, student_name, student_dob, parent_name, email, phone,
 			phone_country_iso, phone_dial_code, country_iso, country_label,
-			state, city, timezone, preferred_time, goal, comment)
-		  VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,
-				  ?11,
-				  ?12,?13,?14,?15,?16)
+			state, city, timezone, preferred_time, goal, comment,
+			age_years, age_policy_message)
+		  VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14,?15,?16,?17,?18)
 		`;
 
 		// 2) Keep your existing vals (already correct)
@@ -72,9 +77,11 @@ export default {
 		  (body.state ?? body.state_label ?? null),
 		  body.city ?? null,
 		  body.timezone ?? null,
-		  (body.preferred_time ?? null),  // <- this gets saved
+		  (body.preferred_time ?? null),
 		  body.goal ?? null,
 		  body.comment ?? null,
+		  ageYears,
+		  agePolicyMsg
 		];
 
       try {
@@ -144,6 +151,8 @@ export default {
 				  <tr><td><b>Goal</b></td><td>${escapeHtml(body.goal || "")}</td></tr>
 				  <tr><td><b>Comment</b></td><td>${escapeHtml(body.comment || "")}</td></tr>
 				  <tr><td><b>Submitted at</b></td><td>${new Date().toISOString()}</td></tr>
+				  <tr><td><b>Age (years)</b></td><td>${escapeHtml(ageYears ?? "")}</td></tr>
+				  <tr><td><b>Age policy</b></td><td>${escapeHtml(agePolicyMsg || "")}</td></tr>
 				</table>
 				<hr/>
 			    <h2>All Signups (latest first)</h2>
