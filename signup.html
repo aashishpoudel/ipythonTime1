@@ -102,6 +102,15 @@
       </fieldset>
       <input type="hidden" name="timezone" id="timezone" />
 
+      <!-- NEW: include computed age + message so it goes to your backend/email -->
+      <input type="hidden" name="age_years" id="age_years" />
+      <input type="hidden" name="age_policy_message" id="age_policy_message" />
+
+      <!-- NEW: on-page messaging shown when DOB is set and on submit -->
+      <div id="age_notice" role="status" aria-live="polite"
+           style="display:none;margin:.5rem 0;padding:.6rem .8rem;border-radius:.5rem;background:#fff7e6;border:1px solid #ffe3b3;font-size:.95rem;">
+      </div>
+
       <button class="btn" type="submit">Submit</button>
     </form>
     <p id="formMsg" role="status" aria-live="polite"></p>

@@ -335,3 +335,73 @@ document.addEventListener('click', (e) => {
   window.addEventListener('resize', setTocLeft);
   window.addEventListener('load', setTocLeft);
 })();
+
+(function () {
+  const form = document.getElementById('signupForm');
+  if (!form) return;
+
+  const nameEl = form.elements['name'];
+  const dobEl  = form.elements['dob'];
+  const msgEl  = document.getElementById('age_policy_message');
+  const yearsEl= document.getElementById('age_years');
+  const noteEl = document.getElementById('age_notice');
+
+  function computeAgeYears(iso) {
+    if (!iso) return NaN;
+    const dob = new Date(iso);
+    if (isNaN(dob)) return NaN;
+    const today = new Date();
+    let y = today.getFullYear() - dob.getFullYear();
+    const m = today.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) y--;
+    return y;
+  }
+
+  function buildAgeMessage(name, years) {
+    // Spec (interpreted with safe edges): <5 => (a), 5–6 => (b), >=7 => (c)
+    if (Number.isNaN(years)) return '';
+    if (years < 5) {
+      return `${name} is too young for iPythonTime class. Sorry for that.`;
+    } else if (years < 7) {
+      return `${name} age is <7 (ideal minimum age). We will keep your child in record and contact you later.`;
+    } else {
+      // For >=7 keep your regular success message as-is; we still send age + empty policy message.
+      return '';
+    }
+  }
+
+  function updateAgeFieldsAndNotice() {
+    const years = computeAgeYears(dobEl?.value);
+    const studentName = (nameEl?.value || 'Student').trim() || 'Student';
+
+    // Fill hidden fields so your backend email includes them
+    if (yearsEl) yearsEl.value = Number.isNaN(years) ? '' : String(years);
+    const policyMsg = buildAgeMessage(studentName, years);
+    if (msgEl) msgEl.value = policyMsg;
+
+    // Show/hide on-page note
+    if (noteEl) {
+      if (policyMsg) {
+        noteEl.textContent = policyMsg;
+        noteEl.style.display = 'block';
+      } else {
+        noteEl.textContent = '';
+        noteEl.style.display = 'none';
+      }
+    }
+  }
+
+  // Keep message live as user fills in the form
+  if (dobEl) dobEl.addEventListener('change', updateAgeFieldsAndNotice);
+  if (nameEl) nameEl.addEventListener('input', updateAgeFieldsAndNotice);
+
+  // Ensure values are set before submit (so email gets the message)
+  form.addEventListener('submit', function () {
+    updateAgeFieldsAndNotice();
+    // We are NOT blocking submission; this just augments payload + shows the note.
+    // If you ever want to block for <5, you could preventDefault() here when years < 5.
+  });
+
+  // Initialize once (covers prefilled DOB)
+  updateAgeFieldsAndNotice();
+})();
