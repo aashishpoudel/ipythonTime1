@@ -51,6 +51,7 @@ export default {
 	  : null;
 
 	  const agePolicyMsg = body.age_policy_message ?? null;
+	  const showAgeNotice = (ageYears != null && ageYears < 7 && !!agePolicyMsg);
 
       // 1) Build the SQL (DEFINE THE VARIABLE)
 		const stmt = `
@@ -106,9 +107,11 @@ export default {
 			from: "iPythonTime <noreply@ipythontime.com>",   // must be verified in Resend
 			to: safeEmail,
 			subject: "Thanks for signing up with iPythonTime!",
-			html: `<p>Hi ${escapeHtml(safeName) || "there"},</p>
-				   <p>Thanks for signing up at iPythonTime! We’ll reach out soon with timeslots and next steps.</p>
-				   <p>– The iPythonTime Team</p>`
+			html: `
+			  ${showAgeNotice ? `<p><strong>${escapeHtml(agePolicyMsg)}</strong></p>` : ""}
+			  <p>Hi ${escapeHtml(safeName) || "there"},</p>
+			  <p>Thanks for signing up at iPythonTime! We’ll reach out soon with timeslots and next steps.</p>
+			  <p>– The iPythonTime Team</p>`
 		  };
 		  console.log("[submit] sending user email", { to: userPayload.to });
 		  const userRes  = await fetch("https://api.resend.com/emails", {
@@ -133,6 +136,7 @@ export default {
 			  to: ["aashish.pd@gmail.com", "poulaashish@yahoo.com"],
 			  subject: "New signup received",
 			  html: `
+				${showAgeNotice ? `<p><strong>Age notice:</strong> ${escapeHtml(agePolicyMsg)}</p>` : ""}
 				<p><strong>New signup</strong></p>
 				<table border="1" cellpadding="6" cellspacing="0">
 				  <tr><td><b>Who is learning</b></td><td>${escapeHtml(body.who_is_learning || "")}</td></tr>

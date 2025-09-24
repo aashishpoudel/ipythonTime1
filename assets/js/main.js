@@ -380,7 +380,7 @@ document.addEventListener('click', (e) => {
 
   function buildAgeMessage(name, years) {
     if (Number.isNaN(years)) return '';
-    if (years < 5) return `${name} is too young for our Python class. This class is suited for Age>=7. Sorry for that.`;
+    if (years < 5) return `${name} is too young for our Python class. This class is suited for Age 7 or higher. Sorry for that.`;
     if (years < 7) return `${name} age is <7 (ideal minimum age). We will keep your child in record and contact you later.`;
     return '';
   }
