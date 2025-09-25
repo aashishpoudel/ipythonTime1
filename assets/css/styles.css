@@ -38,6 +38,9 @@ nav a.cta{background:var(--brand);color:white} nav a.cta:hover{background:var(--
 
 /* Cards and sections adapted for light theme */
 .features{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;padding:2rem 1rem}
+.features .card {text-align: center;}
+.features .card h3 {margin-bottom: 0.5rem;}
+.features .card p {margin: 0 auto; max-width: 90%;}
 .card{background:var(--card);border:1px solid var(--border);border-radius:.75rem;padding:1rem}
 .card h3 {
   text-align: center;
