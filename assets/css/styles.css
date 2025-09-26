@@ -421,7 +421,8 @@ targets.forEach(t=> obs.observe(t));
   border:1px solid var(--border);
   border-radius:.75rem;
   padding:1rem;
-  margin-bottom:1rem;
+  margin-bottom:.7rem;
+  margin-top:.7rem;
 }
 .section h2{ margin-top:0 }
 .callout{ background:#ffffff; }
