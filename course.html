@@ -14,7 +14,7 @@
       border:1px solid var(--border);
       border-radius:1rem;
       padding:1.25rem 1.25rem 1rem;
-      margin: .5rem 0 1rem;
+      margin: .5rem .5 1rem;
       box-shadow: 0 6px 16px rgba(0,0,0,.06);
     }
     .hero h1{ margin:0 0 .25rem 0 }
@@ -106,12 +106,14 @@
 </header>
 
   <main class="container">
+      <div class="sticky-band" id="sticky-band">
         <section class="hero">
           <h1>Python Roadmap</h1>
           <p>This roadmap is self-designed course based on experience on teaching and professional working.</p>
           <a class="btn" href="signup.html">Start Learning</a>
         </section>
         <nav class="toc-chips" aria-label="On this page"><a href="#foundations">Foundations</a><a href="#oop">Object‑Oriented Programming (OOP)</a><a href="#dsa">Data Structures &amp; Algorithms (DSA)</a><a href="#pkg">Package Management</a><a href="#advanced">Advanced Python</a><a href="#web">Web Frameworks</a><a href="#automation">Automation</a><a href="#testing">Testing</a><a href="#datasci">Data Science &amp; Machine Learning</a></nav>
+      </div>
         <div class="page-grid">
           <aside class="toc" aria-label="On this page">
             <h3>On this page</h3>
@@ -119,14 +121,11 @@
               <li><a href="#foundations">Foundations</a></li><li><a href="#oop">Object‑Oriented Programming (OOP)</a></li><li><a href="#dsa">Data Structures &amp; Algorithms (DSA)</a></li><li><a href="#pkg">Package Management</a></li><li><a href="#advanced">Advanced Python</a></li><li><a href="#web">Web Frameworks</a></li><li><a href="#automation">Automation</a></li><li><a href="#testing">Testing</a></li><li><a href="#datasci">Data Science &amp; Machine Learning</a></li>
             </ol>
           </aside>
-          <div class="content">
+        <div class="content">
             
-    
-    
-
     <!-- 1) FOUNDATIONS -->
     <section class="section" id="foundations">
-      <h2>1) Foundations</h2>
+      <h2>Foundations</h2>
       <p>Absolute basics through core language features and beginner projects.</p>
       <div class="cards">
         <article class="card">
@@ -164,7 +163,7 @@
 
     <!-- 2) OOP -->
     <section class="section" id="oop">
-      <h2>2) Object‑Oriented Programming (OOP)</h2>
+      <h2>Object‑Oriented Programming (OOP)</h2>
       <ol class="nice-list">
         <li>OOP Fundamentals</li>
         <li>Classes &amp; Objects</li>
@@ -175,7 +174,7 @@
 
     <!-- 3) DSA -->
     <section class="section" id="dsa">
-      <h2>3) Data Structures &amp; Algorithms (DSA)</h2>
+      <h2>Data Structures &amp; Algorithms (DSA)</h2>
       <div class="cards">
         <article class="card">
           <h3>Core Structures</h3>
@@ -199,7 +198,7 @@
 
     <!-- 4) Package Management -->
     <section class="section" id="pkg">
-      <h2>4) Package Management</h2>
+      <h2>Package Management</h2>
       <ol class="nice-list">
         <li>PyPI</li>
         <li><code>pip</code></li>
@@ -209,7 +208,7 @@
 
     <!-- 5) Advanced Python -->
     <section class="section" id="advanced">
-      <h2>5) Advanced Python</h2>
+      <h2>Advanced Python</h2>
       <div class="cards">
         <article class="card">
           <h3>Language Power‑Ups</h3>
@@ -237,7 +236,7 @@
 
     <!-- 6) Web Frameworks -->
     <section class="section" id="web">
-      <h2>6) Web Frameworks</h2>
+      <h2>Web Frameworks</h2>
       <ol class="nice-list">
         <li>Django</li>
         <li>Flask</li>
@@ -248,7 +247,7 @@
 
     <!-- 7) Automation -->
     <section class="section" id="automation">
-      <h2>7) Automation</h2>
+      <h2>Automation</h2>
       <ol class="nice-list">
         <li>File Manipulation &amp; OS tasks</li>
         <li>Web Scraping</li>
@@ -261,7 +260,7 @@
 
     <!-- 8) Testing -->
     <section class="section" id="testing">
-      <h2>8) Testing</h2>
+      <h2>Testing</h2>
       <ol class="nice-list">
         <li>Unit Testing</li>
         <li>Integration Testing</li>
@@ -272,7 +271,7 @@
 
     <!-- 9) Data Science & ML -->
     <section class="section" id="datasci">
-      <h2>9) Data Science &amp; Machine Learning</h2>
+      <h2>Data Science &amp; Machine Learning</h2>
       <div class="cards">
         <article class="card">
           <h3>Core Stack</h3>
@@ -310,33 +309,7 @@
   <script src="assets/js/main.js"></script>
 
 
-    <script>
-    // Smooth scroll for in-page links (course page only)
-    document.querySelectorAll('a[href^="#"]').forEach(a=>{
-      a.addEventListener('click', (e)=>{
-        const id = a.getAttribute('href').slice(1);
-        const el = document.getElementById(id);
-        if (el){
-          e.preventDefault();
-          el.scrollIntoView({behavior:'smooth', block:'start'});
-          history.replaceState(null, '', '#'+id);
-        }
-      });
-    });
-    // Scroll spy: highlight current section in TOC (aside + chips)
-    const links = Array.from(document.querySelectorAll('.toc a, .toc-chips a'));
-    const targets = links.map(a=> document.querySelector(a.getAttribute('href')) ).filter(Boolean);
-    const onIntersect = (entries)=>{
-      entries.forEach(entry=>{
-        if (entry.isIntersecting){
-          const id = '#'+entry.target.id;
-          links.forEach(a=> a.classList.toggle('active', a.getAttribute('href')===id));
-        }
-      });
-    };
-    const obs = new IntersectionObserver(onIntersect, {rootMargin:'-30% 0px -60% 0px', threshold:0});
-    targets.forEach(t=> obs.observe(t));
-    </script>
+
     
 </body>
 </html>

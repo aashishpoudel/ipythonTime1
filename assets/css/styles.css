@@ -421,7 +421,8 @@ targets.forEach(t=> obs.observe(t));
   border:1px solid var(--border);
   border-radius:.75rem;
   padding:1rem;
-  margin-bottom:1rem;
+  margin-bottom:.7rem;
+  margin-top:.7rem;
 }
 .section h2{ margin-top:0 }
 .callout{ background:#ffffff; }
@@ -606,12 +607,27 @@ targets.forEach(t=> obs.observe(t));
 }
 #goal {
   width: 100%;
-  min-height: 10rem;       /* show ~6 rows comfortably */
-  padding: .5rem .6rem;
+  height: auto;          /* let the box shrink to fit */
+  min-height: unset;     /* override the 10rem */
+  padding: .4rem .6rem;
   border: 1px solid var(--border);
   border-radius: .5rem;
   background: #fff;
+  box-sizing: border-box;
 }
 #goal option {
+  padding: .35rem .25rem;
+}
+#preferred-time {
+  width: 100%;
+  height: auto;          /* let the box shrink to fit */
+  min-height: unset;     /* override the 10rem */
+  padding: .4rem .6rem;
+  border: 1px solid var(--border);
+  border-radius: .5rem;
+  background: #fff;
+  box-sizing: border-box;
+}
+#preferred-time option {
   padding: .35rem .25rem;
 }

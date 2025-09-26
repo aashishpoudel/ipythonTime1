@@ -392,3 +392,39 @@ document.addEventListener('click', (e) => {
   form._buildAgeMessage = buildAgeMessage;
 })();
 
+// --- Smooth scroll + Scroll spy for TOC (works on course.html and why-python.html) ---
+(function () {
+  // Smooth scroll
+  document.querySelectorAll('.toc a, .toc-chips a').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const id = a.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if (el) {
+        e.preventDefault();
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        history.replaceState(null, '', '#' + id);
+      }
+    });
+  });
+
+  // Scroll spy: highlight current section
+  const links = Array.from(document.querySelectorAll('.toc a, .toc-chips a'));
+  const targets = links
+    .map(a => document.getElementById(a.getAttribute('href').slice(1)))
+    .filter(Boolean);
+
+  const onIntersect = (entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = '#' + entry.target.id;
+        links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === id));
+      }
+    });
+  };
+
+  const obs = new IntersectionObserver(onIntersect, {
+    rootMargin: '-30% 0px -60% 0px',
+    threshold: 0
+  });
+  targets.forEach(t => obs.observe(t));
+})();
