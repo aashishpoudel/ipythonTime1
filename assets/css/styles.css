@@ -631,3 +631,18 @@ targets.forEach(t=> obs.observe(t));
 #preferred-time option {
   padding: .35rem .25rem;
 }
+
+.detail-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.detail-list li {
+  margin: .35rem 0;
+}
+
+.detail-list .arrow,
+.detail-list .value {
+  color: rgba(37, 99, 235, 1);   /* your brand blue */
+  font-weight: 600;
+}
